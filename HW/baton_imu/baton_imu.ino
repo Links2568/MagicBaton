@@ -3,8 +3,8 @@
 #include <Wire.h>
 
 // --- 修改你的 WiFi 信息 ---
-const char* ssid     = "Linksys08735";
-const char* password = "8jdghdgrgr";
+const char* ssid     = "******";
+const char* password = "*****";
 const char* udpAddress = "192.168.1.119"; // 电脑的局域网 IP
 const int udpPort = 4210;
 
