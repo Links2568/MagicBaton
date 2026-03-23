@@ -20,12 +20,12 @@ import socket
 import json
 import time
 
-# --- 配置 ---
+# --- Config ---
 UDP_IP = "0.0.0.0" 
 UDP_PORT = 4210
-JSON_FILE = "imu_data.json"
+JSON_FILE = "imu_data_wifi.json"
 
-# 创建 Socket
+# Socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 

@@ -1,20 +1,15 @@
-#include <WiFi.h>
-#include <WiFiUdp.h>
+#include "BluetoothSerial.h" 
 #include <Wire.h>
 
-// --- WiFi info ---
-const char* ssid     = "xxxxx";
-const char* password = "xxxxx";
-const char* udpAddress = "xxxxx"; //PC's IP
-const int udpPort = 4210;
+// --- Bluetooth config ---
+BluetoothSerial SerialBT;
+const char* device_name = "ESP32_Baton"; 
 
-// --- IMU address and registers ---
+// --- IMU address ---
 #define IMU_A_ADDR 0x68
 #define IMU_B_ADDR 0x69
 #define REG_PWR_MGMT_1 0x6B
 #define REG_ACCEL_XOUT_H 0x3B
-
-WiFiUDP udp;
 
 void initIMU(uint8_t addr) {
   Wire.beginTransmission(addr);
@@ -32,16 +27,13 @@ void setup() {
   Wire.begin(21, 22);
   Wire.setClock(400000);
 
-  // Connects to WiFi
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  // Start BT
+  if(!SerialBT.begin(device_name)){
+    Serial.println("An error occurred initializing Bluetooth");
+  } else {
+    Serial.println("Bluetooth initialized, ready to pair!");
   }
-  Serial.println("\nWiFi Connected. IP: " + WiFi.localIP().toString());
 
-  // Initializes the two sensors
   initIMU(IMU_A_ADDR);
   initIMU(IMU_B_ADDR);
 }
@@ -50,16 +42,16 @@ void loop() {
   int16_t axA, ayA, azA, gxA, gyA, gzA;
   int16_t axB, ayB, azB, gxB, gyB, gzB;
 
-  // Reading IMU A. 14 bytes including temp
+  // IMU A 
   Wire.beginTransmission(IMU_A_ADDR);
   Wire.write(REG_ACCEL_XOUT_H);
   Wire.endTransmission(false);
   Wire.requestFrom(IMU_A_ADDR, 14);
   axA = Wire.read()<<8|Wire.read(); ayA = Wire.read()<<8|Wire.read(); azA = Wire.read()<<8|Wire.read();
-  Wire.read(); Wire.read(); 
+  Wire.read(); Wire.read(); // 跳过 Temp
   gxA = Wire.read()<<8|Wire.read(); gyA = Wire.read()<<8|Wire.read(); gzA = Wire.read()<<8|Wire.read();
 
-  // Reading IMU B
+  // IMU B 
   Wire.beginTransmission(IMU_B_ADDR);
   Wire.write(REG_ACCEL_XOUT_H);
   Wire.endTransmission(false);
@@ -68,19 +60,14 @@ void loop() {
   Wire.read(); Wire.read(); // 跳过 Temp
   gxB = Wire.read()<<8|Wire.read(); gyB = Wire.read()<<8|Wire.read(); gzB = Wire.read()<<8|Wire.read();
 
-  // A,ax,ay,az,gx,gy,gz|B,ax,ay,az,gx,gy,gz
+  // String form
   char buf[150];
   snprintf(buf, sizeof(buf), "A,%d,%d,%d,%d,%d,%d|B,%d,%d,%d,%d,%d,%d", 
            axA, ayA, azA, gxA, gyA, gzA,
            axB, ayB, azB, gxB, gyB, gzB);
 
-  // Sending UDP
-  udp.beginPacket(udpAddress, udpPort);
-  udp.print(buf);
-  udp.endPacket();
+  //Send the data
+  SerialBT.println(buf);
 
-  // ）
-  // Serial.println(buf);
-
-  delay(10); //  100Hz updating frequency
+  delay(10); 
 }
