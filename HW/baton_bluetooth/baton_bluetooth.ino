@@ -42,32 +42,33 @@ void loop() {
   int16_t axA, ayA, azA, gxA, gyA, gzA;
   int16_t axB, ayB, azB, gxB, gyB, gzB;
 
-  // IMU A 
-  Wire.beginTransmission(IMU_A_ADDR);
-  Wire.write(REG_ACCEL_XOUT_H);
-  Wire.endTransmission(false);
-  Wire.requestFrom(IMU_A_ADDR, 14);
-  axA = Wire.read()<<8|Wire.read(); ayA = Wire.read()<<8|Wire.read(); azA = Wire.read()<<8|Wire.read();
-  Wire.read(); Wire.read(); // 跳过 Temp
-  gxA = Wire.read()<<8|Wire.read(); gyA = Wire.read()<<8|Wire.read(); gzA = Wire.read()<<8|Wire.read();
+  // // IMU A 
+  // Wire.beginTransmission(IMU_A_ADDR);
+  // Wire.write(REG_ACCEL_XOUT_H);
+  // Wire.endTransmission(false);
+  // Wire.requestFrom(IMU_A_ADDR, 14);
+  // axA = Wire.read()<<8|Wire.read(); ayA = Wire.read()<<8|Wire.read(); azA = Wire.read()<<8|Wire.read();
+  // Wire.read(); Wire.read(); // 跳过 Temp
+  // gxA = Wire.read()<<8|Wire.read(); gyA = Wire.read()<<8|Wire.read(); gzA = Wire.read()<<8|Wire.read();
 
-  // IMU B 
-  Wire.beginTransmission(IMU_B_ADDR);
-  Wire.write(REG_ACCEL_XOUT_H);
-  Wire.endTransmission(false);
-  Wire.requestFrom(IMU_B_ADDR, 14);
-  axB = Wire.read()<<8|Wire.read(); ayB = Wire.read()<<8|Wire.read(); azB = Wire.read()<<8|Wire.read();
-  Wire.read(); Wire.read(); // 跳过 Temp
-  gxB = Wire.read()<<8|Wire.read(); gyB = Wire.read()<<8|Wire.read(); gzB = Wire.read()<<8|Wire.read();
+  // // IMU B 
+  // Wire.beginTransmission(IMU_B_ADDR);
+  // Wire.write(REG_ACCEL_XOUT_H);
+  // Wire.endTransmission(false);
+  // Wire.requestFrom(IMU_B_ADDR, 14);
+  // axB = Wire.read()<<8|Wire.read(); ayB = Wire.read()<<8|Wire.read(); azB = Wire.read()<<8|Wire.read();
+  // Wire.read(); Wire.read(); // 跳过 Temp
+  // gxB = Wire.read()<<8|Wire.read(); gyB = Wire.read()<<8|Wire.read(); gzB = Wire.read()<<8|Wire.read();
 
-  // String form
-  char buf[150];
-  snprintf(buf, sizeof(buf), "A,%d,%d,%d,%d,%d,%d|B,%d,%d,%d,%d,%d,%d", 
-           axA, ayA, azA, gxA, gyA, gzA,
-           axB, ayB, azB, gxB, gyB, gzB);
+  // // String form
+  // char buf[150];
+  // snprintf(buf, sizeof(buf), "A,%d,%d,%d,%d,%d,%d|B,%d,%d,%d,%d,%d,%d", 
+  //          axA, ayA, azA, gxA, gyA, gzA,
+  //          axB, ayB, azB, gxB, gyB, gzB);
 
-  //Send the data
-  SerialBT.println(buf);
+  // //Send the data
+  // SerialBT.println(buf);
+  SerialBT.println("Still Alive");
 
   delay(10); 
 }

@@ -4,7 +4,7 @@ import time
 
 # --- Config ---
 # Check Bluetooth port on device manager 
-SERIAL_PORT = "COM9" 
+SERIAL_PORT = "COM8" 
 BAUD_RATE = 115200
 JSON_FILE = "imu_data_BLE.json"
 
