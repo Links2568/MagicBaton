@@ -52,12 +52,14 @@ pip install -r requirements.txt
 arduino-cli compile --fqbn esp32:esp32:esp32 HW/baton_bluetooth/baton_bluetooth.ino
 arduino-cli upload --fqbn esp32:esp32:esp32 --port /dev/cu.usbserial-0001 HW/baton_bluetooth/baton_bluetooth.ino
 
-# 3. Run dashboard (real-time visualization)
-python server.py        # terminal 1: start WebSocket bridge
-open index.html         # terminal 2: open dashboard in browser
-
-# 4. Record gesture data (for ML training)
+# 3. Record gesture data (this is what you need for ML training)
 python record.py
+
+# 4. (Optional) Run debug dashboard for real-time visualization
+#    This is a separate tool for debugging and future demo purposes.
+#    NOT required for data collection.
+python server.py        # reads USB Serial, serves WebSocket on :8765
+open index.html         # open in browser, connects to server.py
 ```
 
 ## Gesture Reference
