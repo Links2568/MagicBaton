@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MagicBaton Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #08080c;
+  --bg-panel: #101018;
+  --bg-card: #16161f;
+  --bg-card-alt: #1a1a26;
+  --border: #252535;
+  --border-light: #2f2f42;
+  --text: #e4e4ef;
+  --text2: #9090a8;
+  --text3: #5a5a70;
+  --green: #00e676;
+  --green2: #00c853;
+  --blue: #448aff;
+  --blue2: #82b1ff;
+  --orange: #ff9100;
+  --orange2: #ffab40;
+  --red: #ff5252;
+  --purple: #b388ff;
+  --cyan: #18ffff;
+  --pink: #ff80ab;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+
+html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:var(--sans); }
+
+/* ── Layout ── */
+#app {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  grid-template-rows: 44px 1fr;
+  height: 100vh;
+  gap: 0;
+}
+
+/* ── Top Bar ── */
+#topbar {
+  grid-column: 1 / -1;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+}
+
+.logo {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  transition: all 0.4s;
+}
+
+.status-dot.on { background: var(--green); box-shadow: 0 0 10px var(--green); }
+
+#conn-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.topbar-spacer { flex:1; }
+
+#data-rate {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+}
+
+/* ── Left Panel ── */
+#left-panel {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#left-panel::-webkit-scrollbar { width: 4px; }
+#left-panel::-webkit-scrollbar-track { background: transparent; }
+#left-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card-alt);
+}
+
+.card-header .accent {
+  width: 4px; height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.card-header h3 {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text2);
+  flex: 1;
+}
+
+.card-header .badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text3);
+  letter-spacing: 0.5px;
+}
+
+.card-body { padding: 10px 12px; }
+
+/* ── Waveform Charts ── */
+.chart-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.chart-row:last-child { margin-bottom: 0; }
+
+.chart-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  width: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.chart-wrap {
+  flex: 1;
+  height: 44px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.chart-wrap canvas { width: 100%; height: 100%; display: block; }
+
+.chart-wrap .val-overlay {
+  position: absolute;
+  right: 6px; top: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  pointer-events: none;
+}
+
+/* BPM Card */
+.bpm-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+.bpm-number {
+  font-family: var(--mono);
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.bpm-unit {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.bpm-trend-chart {
+  width: 100%;
+  height: 50px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.bpm-trend-chart canvas { width: 100%; height: 100%; display: block; }
+
+.bpm-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.bpm-stat {
+  text-align: center;
+}
+
+.bpm-stat .label {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--text3);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.bpm-stat .val {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+/* Beat + Dynamics row */
+.beat-dyn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.beat-indicator {
+  height: 60px;
+  border-radius: 6px;
+  background: rgba(255,145,0,0.04);
+  border: 1px solid rgba(255,145,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.06s;
+}
+
+.beat-indicator.active {
+  background: rgba(255,145,0,0.2);
+  border-color: var(--orange);
+  box-shadow: 0 0 25px rgba(255,145,0,0.2);
+}
+
+
+.beat-indicator .beat-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.beat-indicator .beat-text {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--orange);
+  opacity: 0.3;
+  transition: opacity 0.06s;
+}
+
+.beat-indicator.active .beat-text { opacity: 1; }
+
+.dynamics-box {
+  height: 60px;
+  border-radius: 6px;
+  background: rgba(179,136,255,0.04);
+  border: 1px solid rgba(179,136,255,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dynamics-box .dyn-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.dynamics-box .dyn-val {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--purple);
+}
+
+/* Magnitude bar */
+.mag-section { margin-top: 2px; }
+
+.mag-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.mag-bar-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  width: 36px;
+  letter-spacing: 0.3px;
+}
+
+.mag-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mag-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.08s;
+  width: 0%;
+}
+
+.mag-bar-fill.a { background: linear-gradient(90deg, var(--green2), var(--green)); }
+.mag-bar-fill.b { background: linear-gradient(90deg, var(--blue), var(--blue2)); }
+
+.mag-bar-val {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  width: 44px;
+  text-align: right;
+}
+
+/* ── Right: Visual Canvas ── */
+#visual-panel {
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+#visual-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#visual-overlay {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ── Slider Controls ── */
+.control-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 6px;
+}
+
+.control-row label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.control-row input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+}
+
+.control-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px; height: 10px;
+  background: var(--orange);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.control-row .ctrl-val {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text2);
+  width: 40px;
+  text-align: right;
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- Top Bar -->
+  <div id="topbar">
+    <div class="logo">
+      <span class="status-dot" id="statusDot"></span>
+      MagicBaton
+    </div>
+    <span id="conn-label">Disconnected</span>
+    <button class="toolbar-btn" id="btn-audio">Sound: OFF</button>
+    <div class="topbar-spacer"></div>
+    <span id="data-rate"></span>
+  </div>
+
+  <!-- Left Panel -->
+  <div id="left-panel">
+    <!-- IMU A Accel -->
+    <div class="card">
+      <div class="card-header">
+        <div class="accent" style="background:var(--green)"></div>
+        <h3>IMU A &mdash; Accelerometer</h3>
+        <span class="badge">50 Hz</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-row"><span class="chart-label" style="color:#ff5252">X</span><div class="chart-wrap"><canvas id="chartAx"></canvas><span class="val-overlay" id="valAx"></span></div></div>
+        <div class="chart-row"><span class="chart-label" style="color:#69f0ae">Y</span><div class="chart-wrap"><canvas id="chartAy"></canvas><span class="val-overlay" id="valAy"></span></div></div>
+        <div class="chart-row"><span class="chart-label" style="color:#448aff">Z</span><div class="chart-wrap"><canvas id="chartAz"></canvas><span class="val-overlay" id="valAz"></span></div></div>
+      </div>
+    </div>
+
+    <!-- IMU B Accel -->
+    <div class="card">
+      <div class="card-header">
+        <div class="accent" style="background:var(--blue)"></div>
+        <h3>IMU B &mdash; Accelerometer</h3>
+        <span class="badge">50 Hz</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-row"><span class="chart-label" style="color:#ff5252">X</span><div class="chart-wrap"><canvas id="chartBx"></canvas><span class="val-overlay" id="valBx"></span></div></div>
+        <div class="chart-row"><span class="chart-label" style="color:#69f0ae">Y</span><div class="chart-wrap"><canvas id="chartBy"></canvas><span class="val-overlay" id="valBy"></span></div></div>
+        <div class="chart-row"><span class="chart-label" style="color:#448aff">Z</span><div class="chart-wrap"><canvas id="chartBz"></canvas><span class="val-overlay" id="valBz"></span></div></div>
+      </div>
+    </div>
+
+    <!-- Gyro (both) -->
+    <div class="card">
+      <div class="card-header">
+        <div class="accent" style="background:var(--cyan)"></div>
+        <h3>Gyroscope</h3>
+        <span class="badge">A + B</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-row"><span class="chart-label" style="color:var(--orange2)">A</span><div class="chart-wrap" style="height:38px"><canvas id="chartGyroA"></canvas></div></div>
+        <div class="chart-row"><span class="chart-label" style="color:var(--cyan)">B</span><div class="chart-wrap" style="height:38px"><canvas id="chartGyroB"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- Magnitude -->
+    <div class="card">
+      <div class="card-header">
+        <div class="accent" style="background:var(--orange)"></div>
+        <h3>Acceleration Magnitude</h3>
+      </div>
+      <div class="card-body mag-section">
+        <div class="mag-bar-wrap"><span class="mag-bar-label">IMU A</span><div class="mag-bar-track"><div class="mag-bar-fill a" id="magBarA"></div></div><span class="mag-bar-val" id="magValA">0</span></div>
+        <div class="mag-bar-wrap"><span class="mag-bar-label">IMU B</span><div class="mag-bar-track"><div class="mag-bar-fill b" id="magBarB"></div></div><span class="mag-bar-val" id="magValB">0</span></div>
+      </div>
+    </div>
+
+    <!-- BPM -->
+    <div class="card">
+      <div class="card-header">
+        <div class="accent" style="background:var(--orange)"></div>
+        <h3>Tempo</h3>
+      </div>
+      <div class="card-body">
+        <div class="bpm-display">
+          <span class="bpm-number" id="bpmNumber">--</span>
+          <span class="bpm-unit">BPM</span>
+        </div>
+        <div class="bpm-trend-chart"><canvas id="chartBPM"></canvas></div>
+        <div class="bpm-stats">
+          <div class="bpm-stat"><div class="label">Min</div><div class="val" id="bpmMin">--</div></div>
+          <div class="bpm-stat"><div class="label">Avg</div><div class="val" id="bpmAvg">--</div></div>
+          <div class="bpm-stat"><div class="label">Max</div><div class="val" id="bpmMax">--</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beat + Dynamics -->
+    <div class="beat-dyn-row">
+      <div class="card">
+        <div class="card-body" style="padding:8px">
+          <div class="beat-indicator" id="beatIndicator">
+            <span class="beat-label">Beat</span>
+            <span class="beat-text">HIT</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:8px">
+          <div class="dynamics-box">
+            <span class="dyn-label">Dynamics</span>
+            <span class="dyn-val" id="dynVal">pp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="card">
+      <div class="card-header">
+        <div class="accent" style="background:var(--text3)"></div>
+        <h3>Detection Settings</h3>
+      </div>
+      <div class="card-body">
+        <div class="control-row">
+          <label>Threshold</label>
+          <input type="range" id="ctrlThreshold" min="500" max="15000" step="250" value="3000">
+          <span class="ctrl-val" id="ctrlThresholdVal">3000</span>
+        </div>
+        <div class="control-row">
+          <label>Smoothing</label>
+          <input type="range" id="ctrlSmoothing" min="1" max="50" value="15">
+          <span class="ctrl-val" id="ctrlSmoothingVal">0.15</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Visual -->
+  <div id="visual-panel">
+    <canvas id="visual-canvas"></canvas>
+    <div id="visual-overlay"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// Data & State
+// ═══════════════════════════════════════
+const HIST_LEN = 200;
+const hist = {
+  ax:[], ay:[], az:[], bx:[], by:[], bz:[],
+  gax:[], gay:[], gaz:[], gbx:[], gby:[], gbz:[],
+  magA:[], magB:[], bpm:[]
+};
+for (const k in hist) for (let i=0;i<HIST_LEN;i++) hist[k].push(0);
+
+let beatThreshold = 3000;
+let smoothAlpha = 0.15;
+let smoothA = [0,0,0], smoothB = [0,0,0];
+let prevRawA = [0,0,0], prevRawB = [0,0,0];
+let prevJerkA = 0;
+let jerkA = 0, jerkB = 0;
+let beatTimes = [];
+let currentBPM = 0;
+let bpmHistory = [];
+let bpmMin = Infinity, bpmMax = 0, bpmSum = 0, bpmCount = 0;
+let beatFlashUntil = 0;
+let currentDynamics = 'pp';
+let lastBeatTime = 0;
+let jerkPeak = 0;
+let jerkDecay = 0;
+
+// Visual state
+let particles = [];
+let rings = [];
+let trails = [];
+let bgHue = 220;
+let bgEnergy = 0;
+
+// Packet counting
+let packetCount = 0;
+let lastRateCheck = performance.now();
+let dataRate = 0;
+
+// ═══════════════════════════════════════
+// Audio Engine (Web Audio API)
+// ═══════════════════════════════════════
+let audioCtx = null;
+let audioEnabled = false;
+
+function initAudio() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  audioEnabled = true;
+}
+
+// Pentatonic scale notes (Hz) — always sounds good
+const SCALE = [261.6, 293.7, 329.6, 392.0, 440.0, 523.3, 587.3, 659.3, 784.0, 880.0];
+
+function playBeatSound(strength, dirX, dirY) {
+  if (!audioCtx || !audioEnabled) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  const now = audioCtx.currentTime;
+  const norm = Math.min(strength / 30000, 1);  // 0..1
+
+  // Pick note from scale based on vertical direction (higher position = higher pitch)
+  const noteIdx = Math.floor(((dirY + 1) / 2) * (SCALE.length - 1));
+  const freq = SCALE[Math.max(0, Math.min(SCALE.length - 1, noteIdx))];
+
+  // Volume from hit strength
+  const vol = 0.08 + norm * 0.25;
+
+  // ── Tone (sine + triangle blend) ──
+  const osc1 = audioCtx.createOscillator();
+  const osc2 = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc1.type = 'sine';
+  osc1.frequency.setValueAtTime(freq, now);
+  osc1.frequency.exponentialRampToValueAtTime(freq * 0.5, now + 0.3);
+
+  osc2.type = 'triangle';
+  osc2.frequency.setValueAtTime(freq * 2, now);
+  osc2.frequency.exponentialRampToValueAtTime(freq, now + 0.15);
+
+  // Envelope: quick attack, medium decay
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(vol, now + 0.008);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25 + norm * 0.2);
+
+  const mix1 = audioCtx.createGain();
+  const mix2 = audioCtx.createGain();
+  mix1.gain.value = 0.6;
+  mix2.gain.value = 0.3;
+
+  osc1.connect(mix1);
+  osc2.connect(mix2);
+  mix1.connect(gain);
+  mix2.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc1.start(now);
+  osc2.start(now);
+  osc1.stop(now + 0.5);
+  osc2.stop(now + 0.5);
+
+  // ── Percussive click ──
+  const noise = audioCtx.createBufferSource();
+  const noiseLen = 0.04;
+  const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * noiseLen, audioCtx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (data.length * 0.15));
+  noise.buffer = buf;
+
+  const noiseGain = audioCtx.createGain();
+  noiseGain.gain.setValueAtTime(vol * 0.5, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + noiseLen);
+
+  const noiseFilter = audioCtx.createBiquadFilter();
+  noiseFilter.type = 'highpass';
+  noiseFilter.frequency.value = 2000 + norm * 4000;
+
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(audioCtx.destination);
+  noise.start(now);
+}
+
+// ═══════════════════════════════════════
+// Charts Setup
+// ═══════════════════════════════════════
+const charts = {};
+function initChart(id, h) {
+  const c = document.getElementById(id);
+  const wrap = c.parentElement;
+  c.width = wrap.clientWidth * 2;
+  c.height = (h || wrap.clientHeight) * 2;
+  charts[id] = c.getContext('2d');
+}
+
+function drawWaveform(ctxId, data, color, range, filled) {
+  const ctx = charts[ctxId];
+  if (!ctx) return;
+  const w = ctx.canvas.width, h = ctx.canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  // Zero line
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, h/2);
+  ctx.lineTo(w, h/2);
+  ctx.stroke();
+
+  if (Array.isArray(color)) {
+    // Multi-channel
+    for (let ch = 0; ch < color.length; ch++) {
+      ctx.strokeStyle = color[ch];
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 0.8;
+      ctx.beginPath();
+      for (let i = 0; i < data[ch].length; i++) {
+        const x = (i / data[ch].length) * w;
+        const norm = (data[ch][i] + range) / (range * 2);
+        const y = h - norm * h;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    return;
+  }
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  for (let i = 0; i < data.length; i++) {
+    const x = (i / data.length) * w;
+    const norm = (data[i] + range) / (range * 2);
+    const y = h - norm * h;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  if (filled) {
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fillStyle = color.replace(')', ',0.08)').replace('rgb', 'rgba');
+    ctx.fill();
+  }
+}
+
+function drawBPMTrend() {
+  const ctx = charts['chartBPM'];
+  if (!ctx) return;
+  const w = ctx.canvas.width, h = ctx.canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  if (hist.bpm.length < 2) return;
+  const data = hist.bpm;
+  const min = 40, max = 200;
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, 'rgba(255,145,0,0.15)');
+  grad.addColorStop(1, 'rgba(255,145,0,0)');
+
+  ctx.beginPath();
+  for (let i = 0; i < data.length; i++) {
+    const x = (i / data.length) * w;
+    const norm = Math.max(0, Math.min(1, (data[i] - min) / (max - min)));
+    const y = h - norm * h;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = 'rgba(255,145,0,0.8)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.lineTo(w, h);
+  ctx.lineTo(0, h);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+}
+
+// ═══════════════════════════════════════
+// Signal Processing
+// ═══════════════════════════════════════
+function processData(d) {
+  packetCount++;
+
+  const aa = d.IMU_A.accel, ag = d.IMU_A.gyro;
+  const ba = d.IMU_B.accel, bg2 = d.IMU_B.gyro;
+
+  // Low-pass filter
+  for (let i=0;i<3;i++) {
+    smoothA[i] += smoothAlpha * (aa[i] - smoothA[i]);
+    smoothB[i] += smoothAlpha * (ba[i] - smoothB[i]);
+  }
+
+  // Push history
+  hist.ax.push(smoothA[0]); hist.ax.shift();
+  hist.ay.push(smoothA[1]); hist.ay.shift();
+  hist.az.push(smoothA[2]); hist.az.shift();
+  hist.bx.push(smoothB[0]); hist.bx.shift();
+  hist.by.push(smoothB[1]); hist.by.shift();
+  hist.bz.push(smoothB[2]); hist.bz.shift();
+  hist.gax.push(ag[0]); hist.gax.shift();
+  hist.gay.push(ag[1]); hist.gay.shift();
+  hist.gaz.push(ag[2]); hist.gaz.shift();
+  hist.gbx.push(bg2[0]); hist.gbx.shift();
+  hist.gby.push(bg2[1]); hist.gby.shift();
+  hist.gbz.push(bg2[2]); hist.gbz.shift();
+
+  // Magnitude (smoothed, for display)
+  const magA = Math.sqrt(smoothA[0]**2 + smoothA[1]**2 + smoothA[2]**2);
+  const magB = Math.sqrt(smoothB[0]**2 + smoothB[1]**2 + smoothB[2]**2);
+  hist.magA.push(magA); hist.magA.shift();
+  hist.magB.push(magB); hist.magB.shift();
+
+  // Jerk
+  const dax = aa[0] - prevRawA[0], day = aa[1] - prevRawA[1], daz = aa[2] - prevRawA[2];
+  const rawJerkA = Math.sqrt(dax*dax + day*day + daz*daz);
+  const dbx = ba[0] - prevRawB[0], dby = ba[1] - prevRawB[1], dbz = ba[2] - prevRawB[2];
+  const rawJerkB = Math.sqrt(dbx*dbx + dby*dby + dbz*dbz);
+  prevRawA = [...aa];
+  prevRawB = [...ba];
+
+  const jerkAlpha = 0.3;
+  jerkA = jerkA * (1 - jerkAlpha) + rawJerkA * jerkAlpha;
+  jerkB = jerkB * (1 - jerkAlpha) + rawJerkB * jerkAlpha;
+  const combinedJerk = Math.max(jerkA, jerkB);
+  jerkDecay = jerkDecay * 0.9 + combinedJerk * 0.1;
+
+  // ── Beat detection ──
+  const now = performance.now();
+  const cooldownOk = (now - lastBeatTime) > 250;
+  if (combinedJerk >= beatThreshold && prevJerkA < beatThreshold && cooldownOk) {
+    lastBeatTime = now;
+    beatFlashUntil = now + 120;
+    jerkPeak = combinedJerk;
+    beatTimes.push(now);
+    if (beatTimes.length > 16) beatTimes.shift();
+
+    const hitDirX = aa[0] / 16384;
+    const hitDirY = -aa[1] / 16384;
+    spawnBeatVisuals(combinedJerk * 3, hitDirX, hitDirY);
+    playBeatSound(combinedJerk * 3, hitDirX, hitDirY);
+
+    if (combinedJerk > 15000) currentDynamics = 'ff';
+    else if (combinedJerk > 10000) currentDynamics = 'f';
+    else if (combinedJerk > 6000) currentDynamics = 'mf';
+    else if (combinedJerk > 3000) currentDynamics = 'p';
+    else currentDynamics = 'pp';
+  }
+  prevJerkA = combinedJerk;
+
+  // BPM
+  if (beatTimes.length >= 2) {
+    const intervals = [];
+    for (let i=1; i<beatTimes.length; i++) intervals.push(beatTimes[i]-beatTimes[i-1]);
+    const avg = intervals.reduce((a,b)=>a+b,0) / intervals.length;
+    currentBPM = Math.round(60000 / avg);
+    if (currentBPM > 20 && currentBPM < 300) {
+      bpmHistory.push(currentBPM);
+      if (bpmHistory.length > 200) bpmHistory.shift();
+      bpmMin = Math.min(bpmMin, currentBPM);
+      bpmMax = Math.max(bpmMax, currentBPM);
+      bpmSum += currentBPM; bpmCount++;
+    }
+  }
+  hist.bpm.push(currentBPM || 0); hist.bpm.shift();
+
+  bgEnergy = bgEnergy * 0.92 + (jerkDecay / 12000) * 0.08;
+
+  return { magA, magB };
+}
+
+// ═══════════════════════════════════════
+// Visual Effects
+// ═══════════════════════════════════════
+// dirX, dirY: -1..1 from accelerometer, maps to canvas position
+function spawnBeatVisuals(strength, dirX, dirY) {
+  dirX = dirX || 0;
+  dirY = dirY || 0;
+  const norm = Math.min(strength / 30000, 1);
+  const vw = visualCanvas.width, vh = visualCanvas.height;
+
+  // Clamp direction and map to canvas area (with padding so bursts stay visible)
+  const padX = vw * 0.15, padY = vh * 0.15;
+  const clampX = Math.max(-1, Math.min(1, dirX));
+  const clampY = Math.max(-1, Math.min(1, dirY));
+  const bx = padX + (clampX + 1) / 2 * (vw - padX * 2);
+  const by = padY + (clampY + 1) / 2 * (vh - padY * 2);
+
+  // Ring
+  rings.push({
+    x: bx, y: by,
+    r: 20, maxR: 100 + norm * 300,
+    alpha: 0.8 + norm * 0.2,
+    hue: (bgHue + Math.random() * 60 - 30) % 360,
+    width: 2 + norm * 6,
+    speed: 3 + norm * 8,
+  });
+
+  // Particles
+  const count = 8 + Math.floor(norm * 30);
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i + Math.random() * 0.3;
+    const speed = 2 + Math.random() * norm * 12;
+    particles.push({
+      x: bx + (Math.random()-0.5)*40,
+      y: by + (Math.random()-0.5)*40,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.015,
+      size: 2 + Math.random() * norm * 6,
+      hue: (bgHue + Math.random() * 80 - 40 + 360) % 360,
+    });
+  }
+
+  // Trail burst
+  for (let i = 0; i < 3; i++) {
+    trails.push({
+      points: [{x: bx, y: by}],
+      vx: (Math.random()-0.5) * 8 * norm,
+      vy: (Math.random()-0.5) * 8 * norm,
+      hue: (bgHue + i * 40) % 360,
+      life: 1,
+      decay: 0.012,
+    });
+  }
+
+  // Shift bg hue
+  bgHue = (bgHue + 15 + norm * 25) % 360;
+}
+
+let visualCanvas, vCtx;
+let frameCount = 0;
+
+function initVisualCanvas() {
+  visualCanvas = document.getElementById('visual-canvas');
+  const panel = document.getElementById('visual-panel');
+  visualCanvas.width = panel.clientWidth * 2;
+  visualCanvas.height = panel.clientHeight * 2;
+  vCtx = visualCanvas.getContext('2d');
+}
+
+function drawVisuals() {
+  const w = visualCanvas.width, h = visualCanvas.height;
+  const cx = w/2, cy = h/2;
+  frameCount++;
+
+  // ── Fade background ──
+  vCtx.fillStyle = 'rgba(8, 8, 12, 0.08)';
+  vCtx.fillRect(0,0,w,h);
+
+  // ── Ambient center glow ──
+  const glowR = 80 + bgEnergy * 200 + Math.sin(frameCount * 0.02) * 10;
+  const glow = vCtx.createRadialGradient(cx, cy, 0, cx, cy, glowR * 2);
+  glow.addColorStop(0, `hsla(${bgHue}, 60%, 30%, ${0.1 + bgEnergy * 0.2})`);
+  glow.addColorStop(0.5, `hsla(${bgHue}, 50%, 20%, ${0.04 + bgEnergy * 0.06})`);
+  glow.addColorStop(1, 'transparent');
+  vCtx.fillStyle = glow;
+  vCtx.fillRect(0, 0, w, h);
+
+  // ── Beat rings ──
+  for (let i = rings.length - 1; i >= 0; i--) {
+    const ring = rings[i];
+    ring.r += ring.speed;
+    ring.alpha *= 0.97;
+    if (ring.r > ring.maxR || ring.alpha < 0.01) { rings.splice(i,1); continue; }
+    vCtx.beginPath();
+    vCtx.arc(ring.x, ring.y, ring.r, 0, Math.PI*2);
+    vCtx.strokeStyle = `hsla(${ring.hue}, 80%, 65%, ${ring.alpha})`;
+    vCtx.lineWidth = ring.width * (1 - ring.r/ring.maxR);
+    vCtx.stroke();
+  }
+
+  // ── Trails ──
+  for (let i = trails.length - 1; i >= 0; i--) {
+    const tr = trails[i];
+    const last = tr.points[tr.points.length - 1];
+    tr.points.push({ x: last.x + tr.vx, y: last.y + tr.vy });
+    tr.vx *= 0.96; tr.vy *= 0.96;
+    tr.vy += 0.05;
+    tr.life -= tr.decay;
+    if (tr.life <= 0) { trails.splice(i, 1); continue; }
+    if (tr.points.length > 2) {
+      vCtx.beginPath();
+      vCtx.moveTo(tr.points[0].x, tr.points[0].y);
+      for (let j = 1; j < tr.points.length; j++) {
+        vCtx.lineTo(tr.points[j].x, tr.points[j].y);
+      }
+      vCtx.strokeStyle = `hsla(${tr.hue}, 70%, 60%, ${tr.life * 0.6})`;
+      vCtx.lineWidth = 2 * tr.life;
+      vCtx.stroke();
+    }
+  }
+
+  // ── Beat particles ──
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy;
+    p.vy += 0.04; p.vx *= 0.99; p.vy *= 0.99;
+    p.life -= p.decay;
+    if (p.life <= 0) { particles.splice(i,1); continue; }
+    vCtx.beginPath();
+    vCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
+    vCtx.fillStyle = `hsla(${p.hue}, 80%, 65%, ${p.life * 0.8})`;
+    vCtx.fill();
+  }
+
+  // ── Overlay info ──
+  document.getElementById('visual-overlay').innerHTML =
+    `Rings: ${rings.length}<br>` +
+    `Particles: ${particles.length}<br>` +
+    `Energy: ${(bgEnergy*100).toFixed(0)}%`;
+}
+
+// ═══════════════════════════════════════
+// UI Update
+// ═══════════════════════════════════════
+function updateUI(mags) {
+  // Accel waveforms
+  drawWaveform('chartAx', hist.ax, '#ff5252', 20000);
+  drawWaveform('chartAy', hist.ay, '#69f0ae', 20000);
+  drawWaveform('chartAz', hist.az, '#448aff', 20000);
+  drawWaveform('chartBx', hist.bx, '#ff5252', 20000);
+  drawWaveform('chartBy', hist.by, '#69f0ae', 20000);
+  drawWaveform('chartBz', hist.bz, '#448aff', 20000);
+
+  // Gyro
+  drawWaveform('chartGyroA', [hist.gax, hist.gay, hist.gaz], ['#ff8a65','#ffd54f','#4fc3f7'], 5000);
+  drawWaveform('chartGyroB', [hist.gbx, hist.gby, hist.gbz], ['#18ffff','#b388ff','#ff80ab'], 5000);
+
+  // Current values
+  const last = (arr) => arr[arr.length-1];
+  document.getElementById('valAx').textContent = Math.round(last(hist.ax));
+  document.getElementById('valAy').textContent = Math.round(last(hist.ay));
+  document.getElementById('valAz').textContent = Math.round(last(hist.az));
+  document.getElementById('valBx').textContent = Math.round(last(hist.bx));
+  document.getElementById('valBy').textContent = Math.round(last(hist.by));
+  document.getElementById('valBz').textContent = Math.round(last(hist.bz));
+
+  // Magnitude bars
+  if (mags) {
+    const pctA = Math.min(mags.magA / 40000 * 100, 100);
+    const pctB = Math.min(mags.magB / 40000 * 100, 100);
+    document.getElementById('magBarA').style.width = pctA + '%';
+    document.getElementById('magBarB').style.width = pctB + '%';
+    document.getElementById('magValA').textContent = Math.round(mags.magA);
+    document.getElementById('magValB').textContent = Math.round(mags.magB);
+  }
+
+  // BPM
+  const bpmEl = document.getElementById('bpmNumber');
+  if (currentBPM > 0 && currentBPM < 300) {
+    bpmEl.textContent = currentBPM;
+    bpmEl.style.color = `hsl(${Math.max(0, 30 - (currentBPM-60)*0.3)}, 100%, 65%)`;
+  } else {
+    bpmEl.textContent = '--';
+    bpmEl.style.color = 'var(--text3)';
+  }
+  drawBPMTrend();
+  document.getElementById('bpmMin').textContent = bpmMin < Infinity ? bpmMin : '--';
+  document.getElementById('bpmMax').textContent = bpmMax > 0 ? bpmMax : '--';
+  document.getElementById('bpmAvg').textContent = bpmCount > 0 ? Math.round(bpmSum/bpmCount) : '--';
+
+  // Beat flash
+  const beating = performance.now() < beatFlashUntil;
+  document.getElementById('beatIndicator').classList.toggle('active', beating);
+
+  // Dynamics
+  document.getElementById('dynVal').textContent = currentDynamics;
+
+  // Data rate
+  const now = performance.now();
+  if (now - lastRateCheck > 1000) {
+    dataRate = Math.round(packetCount * 1000 / (now - lastRateCheck));
+    packetCount = 0;
+    lastRateCheck = now;
+    document.getElementById('data-rate').textContent = dataRate + ' pkt/s';
+  }
+}
+
+// ═══════════════════════════════════════
+// WebSocket
+// ═══════════════════════════════════════
+let ws = null;
+let latestData = null;
+
+function connectWS() {
+  ws = new WebSocket('ws://localhost:8765');
+  ws.onopen = () => {
+    document.getElementById('statusDot').classList.add('on');
+    document.getElementById('conn-label').textContent = 'Connected';
+  };
+  ws.onmessage = (e) => {
+    try { latestData = JSON.parse(e.data); } catch {}
+  };
+  ws.onclose = () => {
+    document.getElementById('statusDot').classList.remove('on');
+    document.getElementById('conn-label').textContent = 'Disconnected';
+    setTimeout(connectWS, 2000);
+  };
+  ws.onerror = () => ws.close();
+}
+
+// ═══════════════════════════════════════
+// Controls
+// ═══════════════════════════════════════
+function setupControls() {
+  const thresh = document.getElementById('ctrlThreshold');
+  const smooth = document.getElementById('ctrlSmoothing');
+  thresh.addEventListener('input', () => {
+    beatThreshold = parseInt(thresh.value);
+    document.getElementById('ctrlThresholdVal').textContent = thresh.value;
+  });
+  smooth.addEventListener('input', () => {
+    smoothAlpha = parseInt(smooth.value) / 100;
+    document.getElementById('ctrlSmoothingVal').textContent = smoothAlpha.toFixed(2);
+  });
+
+  // Audio toggle
+  const audioBtn = document.getElementById('btn-audio');
+  audioBtn.addEventListener('click', () => {
+    if (!audioCtx) initAudio();
+    audioEnabled = !audioEnabled;
+    audioBtn.textContent = audioEnabled ? 'Sound: ON' : 'Sound: OFF';
+    audioBtn.style.borderColor = audioEnabled ? 'var(--green)' : '';
+    audioBtn.style.color = audioEnabled ? 'var(--green)' : '';
+  });
+}
+
+// ═══════════════════════════════════════
+// Main Loop
+// ═══════════════════════════════════════
+let lastMags = null;
+
+function mainLoop() {
+  if (latestData) {
+    lastMags = processData(latestData);
+    latestData = null;
+  }
+  updateUI(lastMags);
+  drawVisuals();
+  requestAnimationFrame(mainLoop);
+}
+
+function init() {
+  // Init all chart canvases
+  ['chartAx','chartAy','chartAz','chartBx','chartBy','chartBz'].forEach(id => initChart(id));
+  ['chartGyroA','chartGyroB'].forEach(id => initChart(id));
+  initChart('chartBPM');
+  initVisualCanvas();
+  setupControls();
+  connectWS();
+  requestAnimationFrame(mainLoop);
+
+  // Resize handler
+  window.addEventListener('resize', () => {
+    ['chartAx','chartAy','chartAz','chartBx','chartBy','chartBz','chartGyroA','chartGyroB','chartBPM'].forEach(id => initChart(id));
+    initVisualCanvas();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
