@@ -155,7 +155,41 @@ Trace the letter W in the air with the baton tip. Zig-zag up and down, roughly 2
 
 Diagonal stroke down-left, then a horizontal stroke to the right. Like drawing a checkmark. About 1 second total.
 
-## Recording Tips
+## How to Record
+
+1. Run `python record.py` and wait for BLE connection
+2. **Click** the gesture you want to record in the left panel
+3. Get the baton into the **starting position** for that gesture
+4. Press **Space** to start recording
+5. **Perform the gesture once**, cleanly
+6. Press **Space** to stop recording immediately after the gesture ends
+7. Repeat from step 4 for the next rep (same gesture)
+8. Click a different gesture to switch, or press **Undo Last** if you messed up
+
+### Important: Keep recordings clean
+
+Each recording should contain **only the gesture itself** — nothing before, nothing after.
+
+- **DO**: Press Space right before you start moving, stop right after you finish
+- **DON'T**: Include the wind-up, the recovery, or the return to rest position
+- **DON'T**: Include pauses or idle time at the start/end of a recording
+- For `stab`: record only the forward thrust, NOT the pull-back
+- For `beat`: record only the downswing, NOT the arm raising back up
+- For `shake`: record the sustained shaking, trim the start/stop transitions
+
+Bad example (too much noise):
+```
+[idle...idle...] [GESTURE] [recovery...idle...]
+                 ^^^^^^^^^ only this part
+```
+
+Good example:
+```
+[GESTURE]
+^^^^^^^^^ the entire recording
+```
+
+### General Tips
 
 - Start with the most distinct gestures: `idle`, `beat`, `stab`, `spin`
 - Record 25-30 reps per gesture
