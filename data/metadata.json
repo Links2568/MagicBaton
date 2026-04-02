@@ -8,6 +8,33 @@
       "duration_s": 2.46,
       "hz": 43.9,
       "date": "2026-04-02 17:30:04"
+    },
+    {
+      "file": "stab_002.csv",
+      "gesture": "stab",
+      "rep": 2,
+      "samples": 96,
+      "duration_s": 2.13,
+      "hz": 45.1,
+      "date": "2026-04-02 17:42:40"
+    },
+    {
+      "file": "stab_003.csv",
+      "gesture": "stab",
+      "rep": 3,
+      "samples": 42,
+      "duration_s": 0.87,
+      "hz": 48.2,
+      "date": "2026-04-02 17:42:46"
+    },
+    {
+      "file": "stab_004.csv",
+      "gesture": "stab",
+      "rep": 4,
+      "samples": 79,
+      "duration_s": 1.74,
+      "hz": 45.3,
+      "date": "2026-04-02 17:42:49"
     }
   ]
 }
