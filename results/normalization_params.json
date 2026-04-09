@@ -1,0 +1,18 @@
+{
+  "norm_scale": 32768.0,
+  "seq_len": 128,
+  "in_channels": 6,
+  "class_names": [
+    "idle",
+    "beat",
+    "stab",
+    "spin",
+    "infinity",
+    "slash",
+    "shake",
+    "flick",
+    "wing",
+    "slope"
+  ],
+  "transform": "diff = (IMU_A - IMU_B) / 2 / 32768.0"
+}
