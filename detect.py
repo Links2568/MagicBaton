@@ -38,13 +38,11 @@ CHANNELS = [
     "ax_b", "ay_b", "az_b", "gx_b", "gy_b", "gz_b",
 ]
 
-# Segmentation parameters
-ENERGY_THRESHOLD = 0.015    # idle noise ~0.003, gesture >0.05
-QUIET_FRAMES = 12           # 240ms, bridges infinity/wing pauses
-MIN_GESTURE_SAMPLES = 15    # reject noise spikes
-MAX_GESTURE_SAMPLES = 200   # ~4s forced cutoff
-CONFIDENCE_THRESHOLD = 0.55
-COOLDOWN_SECONDS = 0.8
+# Sliding window parameters
+WINDOW_SIZE = 64            # samples per classification window
+WINDOW_STRIDE = 16          # classify every N new samples
+CONFIDENCE_THRESHOLD = 0.35
+COOLDOWN_SECONDS = 0.2
 
 # Model constants (must match train.py)
 SEQ_LEN = 128
@@ -53,7 +51,6 @@ NORM_SCALE = 32768.0
 
 # Display
 WAVE_LEN = 200
-ENERGY_WINDOW = 10
 
 
 # ── BLE Parsing ──
@@ -154,89 +151,51 @@ def run_inference(model, tensor):
 
 class GestureDetector:
     """
-    Energy-gated segmentation state machine.
-
-    States: IDLE -> ACTIVE -> COOLDOWN -> IDLE
+    Sliding-window gesture detector.
+    Continuously buffers samples and classifies every WINDOW_STRIDE frames.
+    No energy gating — the model decides idle vs gesture.
     """
 
     def __init__(self, model):
         self.model = model
         self.state = "IDLE"
-        self.segment = []           # accumulated raw samples during ACTIVE
-        self.quiet_count = 0        # consecutive quiet frames
+        self.buffer = collections.deque(maxlen=WINDOW_SIZE)
+        self.samples_since_last = 0
         self.cooldown_start = 0.0
-        self.energy_buffer = collections.deque(maxlen=ENERGY_WINDOW)
-        self.last_energy = 0.0
-        self.prev_diff = None       # previous diff frame for energy calc
-        self.result = None          # latest (class_name, confidence, probs, n_samples)
+        self.last_energy = 0.0       # kept for display compatibility
+        self.result = None
 
     def feed(self, raw_12ch):
         """
         Feed one 12-channel sample. Returns prediction tuple or None.
-        raw_12ch: list of 12 ints.
         """
-        # Compute diff for energy
-        arr = np.array(raw_12ch, dtype=np.float32)
-        imu_a = arr[:6]
-        imu_b = arr[6:]
-        diff = (imu_a - imu_b) / 2.0 / NORM_SCALE
+        self.buffer.append(raw_12ch)
+        self.samples_since_last += 1
 
-        if self.prev_diff is not None:
-            frame_energy = float(np.mean((diff - self.prev_diff) ** 2))
-        else:
-            frame_energy = 0.0
-        self.prev_diff = diff
-
-        self.energy_buffer.append(frame_energy)
-        self.last_energy = float(np.mean(self.energy_buffer))
-
-        result = None
-
-        if self.state == "IDLE":
-            if self.last_energy > ENERGY_THRESHOLD:
-                self.state = "ACTIVE"
-                self.segment = [raw_12ch]
-                self.quiet_count = 0
-
-        elif self.state == "ACTIVE":
-            self.segment.append(raw_12ch)
-
-            if self.last_energy < ENERGY_THRESHOLD:
-                self.quiet_count += 1
-            else:
-                self.quiet_count = 0
-
-            # Termination: quiet period or forced cutoff
-            if self.quiet_count >= QUIET_FRAMES or len(self.segment) >= MAX_GESTURE_SAMPLES:
-                result = self._classify()
-                self.state = "COOLDOWN"
-                self.cooldown_start = time.time()
-                self.segment = []
-
-        elif self.state == "COOLDOWN":
+        # Cooldown: skip classification
+        if self.state == "COOLDOWN":
             if time.time() - self.cooldown_start >= COOLDOWN_SECONDS:
                 self.state = "IDLE"
-
-        return result
-
-    def _classify(self):
-        """Classify accumulated segment. Returns tuple or None."""
-        # Trim quiet tail
-        seg = self.segment
-        if self.quiet_count > 0:
-            seg = seg[:-self.quiet_count]
-
-        if len(seg) < MIN_GESTURE_SAMPLES:
             return None
 
+        # Only classify every WINDOW_STRIDE samples and when buffer is full
+        if self.samples_since_last < WINDOW_STRIDE or len(self.buffer) < WINDOW_SIZE:
+            return None
+
+        self.samples_since_last = 0
+        self.state = "ACTIVE"
+
+        seg = list(self.buffer)
         tensor = preprocess_segment(seg)
         class_name, confidence, probs = run_inference(self.model, tensor)
 
-        # Filter: skip idle predictions and low confidence
         if class_name == "idle" or confidence < CONFIDENCE_THRESHOLD:
+            self.state = "IDLE"
             return None
 
         self.result = (class_name, confidence, probs, len(seg))
+        self.state = "COOLDOWN"
+        self.cooldown_start = time.time()
         return self.result
 
 
@@ -480,29 +439,13 @@ class DetectorApp:
         # Detection indicator
         if self.detector.state == "ACTIVE":
             c.create_rectangle(0, 0, w, h, outline="#ff9944", width=3)
-            n = len(self.detector.segment)
-            c.create_text(w - 10, 14, text=f"DETECTING  {n}",
+            c.create_text(w - 10, 14, text="DETECTING",
                           fill="#ff9944", font=("Menlo", 11, "bold"), anchor="ne")
 
-    # ── Energy Bar ──
+    # ── Energy Bar (disabled — kept as placeholder) ──
     def _draw_energy(self):
         c = self.energy_canvas
         c.delete("all")
-        cw, ch = 140, 16
-        energy = self.detector.last_energy
-        # Log-scale for better visibility: map threshold region
-        ratio = min(energy / (ENERGY_THRESHOLD * 5), 1.0)
-        bar_w = max(1, int(ratio * (cw - 2)))
-
-        if energy > ENERGY_THRESHOLD:
-            color = "#ff9944" if self.detector.state == "ACTIVE" else "#44ff88"
-        else:
-            color = "#333355"
-
-        c.create_rectangle(1, 1, bar_w, ch - 1, fill=color, outline="")
-        # Threshold line
-        thr_x = int(ENERGY_THRESHOLD / (ENERGY_THRESHOLD * 5) * (cw - 2))
-        c.create_line(thr_x, 0, thr_x, ch, fill="#ff4466", width=1)
 
     # ── State Label ──
     def _update_state(self):
