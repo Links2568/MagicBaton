@@ -192,6 +192,119 @@ ESP32 + 2x MPU6050
 
 The dashboard displays real-time sensor waveforms, beat detection (jerk-based), BPM tracking, dynamics (pp-ff), and a visual effects canvas that responds to baton motion.
 
+## Beat Detection
+
+The dashboard detects conducting beats from IMU data using a **jerk-based rising-edge detector** with cooldown debouncing.
+
+### How it works
+
+Jerk (the rate of change of acceleration) is used instead of raw acceleration because the defining moment of a conductor's beat is the sudden change — the wrist stopping or reversing direction — not the acceleration magnitude itself.
+
+A beat is registered when three conditions are met simultaneously:
+
+1. **Threshold crossing**: `combinedJerk >= beatThreshold` — the current frame's jerk exceeds the detection threshold.
+2. **Rising edge**: `prevJerkA < beatThreshold` — the previous frame was still below the threshold. This ensures the beat fires only once at the moment jerk crosses the threshold, not continuously while jerk stays high.
+3. **Cooldown**: `(now - lastBeatTime) > 180` — at least 180ms since the last beat. This caps detection at ~333 BPM and prevents a single vigorous swing from producing multiple false triggers due to oscillation.
+
+### On beat trigger
+
+When a beat is detected, the system:
+
+- Records the timestamp in `beatTimes[]` (capped at 16 entries), which feeds the BPM calculator.
+- Extracts the hit direction from IMU A's raw accelerometer values (`aa[0] / 16384` for X, `-aa[1] / 16384` for Y, where 16384 is the MPU6050's raw count per g at ±2g range) and spawns directional visual particle effects.
+- Plays a beat sound effect only when MIDI playback is inactive, to avoid clashing with the music.
+- Maps jerk magnitude to musical dynamics notation (`pp` → `ff`) based on intensity thresholds:
+
+| Jerk         | Dynamics |
+|-------------|----------|
+| > 15000     | ff       |
+| > 10000     | f        |
+| > 6000      | mf       |
+| > 3000      | p        |
+| ≤ 3000      | pp       |
+
+### BPM calculation
+
+Beat timestamps older than 3 seconds are expired first. If at least 2 beats remain, the system computes inter-beat intervals, takes only the **last 4 intervals** for averaging, and converts to BPM via `60000 / avg`. Using only the 4 most recent intervals (roughly 2–3 seconds of data) balances stability against responsiveness — older intervals would slow down the response when the conductor accelerates or decelerates.
+
+If fewer than 2 valid beats exist (e.g., the conductor stops), `currentBPM` drops to 0.
+
+### Background energy
+
+```js
+bgEnergy = bgEnergy * 0.92 + (jerkDecay / 12000) * 0.08;
+```
+
+An exponential moving average (EMA) that smoothly tracks overall motion intensity. 92% old value + 8% new value means `bgEnergy` responds slowly to changes, driving background visual brightness/activity without flickering on single-frame jerk spikes.
+
+## MIDI Player
+
+The dashboard includes a browser-based MIDI player that can sync its playback speed to the conducting baton in real time.
+
+### Dependencies
+
+- **[@tonejs/midi](https://github.com/Tonejs/Midi)** (`Midi` class): Parses `.mid` files into structured JavaScript objects containing tracks, notes, and header metadata (PPQ, tempos).
+- **[Tone.js](https://tonejs.github.io/)** (`Tone.Transport`, `Tone.PolySynth`): Provides the audio engine, scheduling transport, and synthesizer.
+
+### MIDI parsing and note scheduling
+
+MIDI files are parsed into a structure like:
+
+```js
+midiParsedData = {
+  header: { ppq: 480, tempos: [{ bpm: 76 }] },
+  tracks: [
+    { notes: [{ name: "C4", ticks: 0, durationTicks: 240, velocity: 0.8 }, ...] },
+    ...
+  ]
+}
+```
+
+The original BPM is extracted from `header.tempos[0].bpm` (defaults to 120 if absent). Notes are scheduled onto `Tone.Transport` using **tick-based timing** rather than absolute seconds:
+
+```js
+const st = Math.round(note.ticks * tonePPQ / midiPPQ);
+const dur = Math.max(1, Math.round(note.durationTicks * tonePPQ / midiPPQ));
+Tone.Transport.schedule((time) => {
+  midiSynth.triggerAttackRelease(note.name, dur + 'i', time, note.velocity);
+}, st + 'i');
+```
+
+The PPQ ratio (`tonePPQ / midiPPQ`) rescales between the MIDI file's pulses-per-quarter-note and Tone.js Transport's internal PPQ, preserving all rhythmic relationships. The `'i'` suffix tells Tone.js the unit is ticks (not seconds), so the real-time playback position of each note is determined entirely by `Tone.Transport.bpm`. Changing BPM changes the speed of everything proportionally, without re-scheduling any notes.
+
+### Tempo synchronization
+
+The function `updateMidiTempo(bpm)` bridges beat detection to MIDI playback:
+
+```js
+function updateMidiTempo(bpm) {
+  if (!midiIsPlaying || !midiFollowBaton || !window.Tone) return;
+  if (bpm > 20 && bpm < 300) {
+    Tone.Transport.bpm.rampTo(bpm, 0.15);
+  } else {
+    Tone.Transport.bpm.rampTo(midiOrigBPM, 1.0);
+  }
+}
+```
+
+- **Valid BPM (20–300)**: `rampTo(bpm, 0.15)` smoothly transitions to the new tempo over 0.15 seconds. Smooth ramping is essential because IMU data updates every frame — hard-setting BPM each frame would cause audible clock jitter. 0.15s is fast enough to feel responsive but smooth enough to avoid artifacts.
+- **Invalid/zero BPM** (conductor stops or data anomaly): `rampTo(midiOrigBPM, 1.0)` slowly drifts back to the original tempo over 1 second, so the music gracefully returns to its natural pace rather than abruptly snapping.
+
+### Follow Baton toggle
+
+When the user unchecks "Follow Baton", the system immediately hard-sets `Tone.Transport.bpm.value = midiOrigBPM` (no ramp) for instant response to user intent. When re-enabled, real-time tempo sync resumes on the next frame.
+
+### Playback controls
+
+- **Play**: Unlocks the browser audio context (`Tone.start()` — required by Chrome's autoplay policy) and starts `Tone.Transport`.
+- **Pause**: Freezes the transport clock; playback resumes from the paused position.
+- **Stop**: Resets the transport to position 0 and calls `midiSynth.releaseAll()` to immediately silence any sustained notes.
+- **Loop**: Toggles `Tone.Transport.loop` with boundaries set from tick 0 to `maxTick + 1 beat` of padding.
+
+### MIDI library
+
+A built-in library of base64-encoded MIDI files (e.g., Beethoven Symphony No. 7 Mov. 2) is stored in the `MIDI_LIBRARY` object. These are decoded at load time via `atob()` → `Uint8Array` → `ArrayBuffer` → `new Midi()`, following the same parsing and scheduling pipeline as uploaded files.
+
 ## License
 
 See [LICENSE](LICENSE).
