@@ -28,12 +28,10 @@ GESTURES = [
     "beat",       # 1 - downward strike
     "stab",       # 2 - forward thrust
     "spin",       # 3 - draw a circle
-    "infinity",   # 4 - draw figure-8 (∞)
-    "slash",      # 5 - diagonal cut
-    "shake",      # 6 - rapid tremolo
-    "flick",      # 7 - quick wrist snap
-    "wing",       # 8 - draw W shape
-    "slope",      # 9 - draw checkmark
+    "slash",      # 4 - diagonal cut
+    "shake",      # 5 - rapid tremolo
+    "flick",      # 6 - quick wrist snap
+    "wing",       # 7 - draw W shape
 ]
 CHANNELS = [
     "ax_a", "ay_a", "az_a", "gx_a", "gy_a", "gz_a",

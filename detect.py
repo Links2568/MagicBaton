@@ -28,8 +28,8 @@ BLE_TX_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results", "batonnet.pt")
 
 GESTURES = [
-    "idle", "beat", "stab", "spin", "infinity",
-    "slash", "shake", "flick", "wing", "slope",
+    "idle", "beat", "stab", "spin",
+    "slash", "shake", "flick", "wing",
 ]
 NUM_CLASSES = len(GESTURES)
 

@@ -27,8 +27,8 @@ from torch.utils.data import DataLoader, Dataset
 # Constants
 # ---------------------------------------------------------------------------
 GESTURES = [
-    "idle", "beat", "stab", "spin", "infinity",
-    "slash", "shake", "flick", "wing", "slope",
+    "idle", "beat", "stab", "spin",
+    "slash", "shake", "flick", "wing",
 ]
 GESTURE_TO_IDX = {g: i for i, g in enumerate(GESTURES)}
 NUM_CLASSES = len(GESTURES)

@@ -1,6 +1,6 @@
 """
 MagicBaton WebSocket Bridge
-Reads IMU data from ESP32 via USB serial and forwards to browser via WebSocket.
+Reads IMU data from ESP32 via BLE and forwards to browser via WebSocket.
 Falls back to mock data when no hardware is connected.
 """
 
@@ -8,30 +8,18 @@ import asyncio
 import json
 import math
 import time
-import threading
 import websockets
-import serial
-import serial.tools.list_ports
+from bleak import BleakClient, BleakScanner
 
 # --- Config ---
-BAUD_RATE = 115200
+BLE_DEVICE_NAME = "MagicBaton"
+BLE_TX_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 WS_HOST = "0.0.0.0"
 WS_PORT = 8765
 
 connected_clients = set()
 latest_data = None
 use_mock = True
-
-
-def find_serial_port():
-    ports = serial.tools.list_ports.comports()
-    for p in ports:
-        if "usbserial" in p.device or "usbmodem" in p.device:
-            return p.device
-    for p in ports:
-        if "usb" in p.device.lower():
-            return p.device
-    return None
 
 
 def parse_imu_line(message):
@@ -78,38 +66,41 @@ def generate_mock_data():
     }
 
 
-def serial_thread_func():
-    """Read IMU data from USB serial in a separate thread."""
+async def ble_task():
+    """Connect to MagicBaton via BLE, feed latest_data."""
     global latest_data, use_mock
 
     while True:
-        port = find_serial_port()
-        if not port:
-            time.sleep(3)
-            continue
-
+        print("[BLE] Scanning...", flush=True)
         try:
-            ser = serial.Serial(port, BAUD_RATE, timeout=0.1)
-            print(f"[Serial] Connected to {port}", flush=True)
-            use_mock = False
+            device = await BleakScanner.find_device_by_name(BLE_DEVICE_NAME, timeout=8.0)
+            if not device:
+                print("[BLE] Not found, retrying...", flush=True)
+                await asyncio.sleep(3)
+                continue
 
-            while True:
-                raw = ser.readline()
-                if not raw:
-                    continue
-                line = raw.decode("utf-8", errors="ignore").strip()
-                parsed = parse_imu_line(line)
-                if parsed:
-                    latest_data = parsed
+            print(f"[BLE] Connecting to {device.name} ({device.address})...", flush=True)
+            async with BleakClient(device) as client:
+                use_mock = False
+                print("[BLE] Connected", flush=True)
 
-        except serial.SerialException as e:
-            print(f"[Serial] Disconnected: {e}", flush=True)
+                def on_notify(sender, data):
+                    global latest_data
+                    line = data.decode("utf-8", errors="ignore").strip()
+                    parsed = parse_imu_line(line)
+                    if parsed:
+                        latest_data = parsed
+
+                await client.start_notify(BLE_TX_UUID, on_notify)
+                while client.is_connected:
+                    await asyncio.sleep(0.5)
+
             use_mock = True
-            time.sleep(3)
+            print("[BLE] Disconnected", flush=True)
         except Exception as e:
-            print(f"[Serial] Error: {e}", flush=True)
             use_mock = True
-            time.sleep(3)
+            print(f"[BLE] Error: {e}", flush=True)
+            await asyncio.sleep(3)
 
 
 async def ws_handler(websocket):
@@ -143,14 +134,14 @@ async def broadcast_loop():
 
 
 async def main():
-    t = threading.Thread(target=serial_thread_func, daemon=True)
-    t.start()
-
-    await websockets.serve(ws_handler, WS_HOST, WS_PORT)
+    server = await websockets.serve(ws_handler, WS_HOST, WS_PORT)
     print(f"[WS] Server on ws://{WS_HOST}:{WS_PORT}", flush=True)
-    print("[INFO] Mock data until serial connects. Open index.html in browser.", flush=True)
+    print("[INFO] Scanning for MagicBaton via BLE... Mock data until connected.", flush=True)
 
-    await broadcast_loop()
+    await asyncio.gather(
+        ble_task(),
+        broadcast_loop(),
+    )
 
 
 if __name__ == "__main__":

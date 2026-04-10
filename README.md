@@ -64,7 +64,7 @@ open index.html         # open in browser, connects to server.py
 
 ## Gesture Reference
 
-10 gestures, mapped to keys `0-9` in the recorder:
+8 gestures, mapped to keys `0-7` in the recorder:
 
 ### 0 — idle (stationary)
 
@@ -102,16 +102,7 @@ Thrust the baton forward along its long axis, like a fencing lunge. Both IMUs ac
 
 Move the baton tip in a full circle in the air. Clockwise or counterclockwise, one complete loop. Keep it smooth and round.
 
-### 4 — infinity (draw a figure-8)
-
-```
-   ╭╮ ╭╮
-   ╰╯ ╰╯
-```
-
-Trace a horizontal figure-8 (infinity symbol) in the air. Right loop, then left loop, one continuous motion. The direction reversal halfway through is the key signal.
-
-### 5 — slash (diagonal cut)
+### 4 — slash (diagonal cut)
 
 ```
   ╲
@@ -121,7 +112,7 @@ Trace a horizontal figure-8 (infinity symbol) in the air. Right loop, then left 
 
 A diagonal swipe from upper-left to lower-right (or the reverse). Like a sword slash. Similar to beat but at a ~45-degree angle.
 
-### 6 — shake (tremolo)
+### 5 — shake (tremolo)
 
 ```
   ←→←→←→
@@ -129,7 +120,7 @@ A diagonal swipe from upper-left to lower-right (or the reverse). Like a sword s
 
 Rapidly shake the baton side to side for 1-2 seconds, like a tremolo. The signal is high-frequency alternating acceleration, sustained over time.
 
-### 7 — flick (wrist snap)
+### 6 — flick (wrist snap)
 
 ```
   ⤴
@@ -137,7 +128,7 @@ Rapidly shake the baton side to side for 1-2 seconds, like a tremolo. The signal
 
 A single sharp wrist snap — extremely quick and short. Like flicking water off your fingers. Over in a fraction of a second.
 
-### 8 — wing (draw a W)
+### 7 — wing (draw a W)
 
 ```
   /\  /\
@@ -145,15 +136,6 @@ A single sharp wrist snap — extremely quick and short. Like flicking water off
 ```
 
 Trace the letter W in the air with the baton tip. Zig-zag up and down, roughly 2 seconds for the full shape.
-
-### 9 — slope (draw a checkmark)
-
-```
-  \
-   \___
-```
-
-Diagonal stroke down-left, then a horizontal stroke to the right. Like drawing a checkmark. About 1 second total.
 
 ## How to Record
 
