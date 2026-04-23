@@ -1,0 +1,1894 @@
+{
+  "sessions": [
+    {
+      "file": "beat_001.csv",
+      "gesture": "beat",
+      "rep": 1,
+      "samples": 57,
+      "duration_s": 1.2,
+      "hz": 47.5,
+      "date": "2026-04-03 16:22:25"
+    },
+    {
+      "file": "beat_002.csv",
+      "gesture": "beat",
+      "rep": 2,
+      "samples": 70,
+      "duration_s": 1.56,
+      "hz": 44.9,
+      "date": "2026-04-03 16:22:30"
+    },
+    {
+      "file": "beat_003.csv",
+      "gesture": "beat",
+      "rep": 3,
+      "samples": 82,
+      "duration_s": 1.8,
+      "hz": 45.5,
+      "date": "2026-04-03 16:22:36"
+    },
+    {
+      "file": "beat_004.csv",
+      "gesture": "beat",
+      "rep": 4,
+      "samples": 85,
+      "duration_s": 1.86,
+      "hz": 45.7,
+      "date": "2026-04-03 16:22:42"
+    },
+    {
+      "file": "beat_005.csv",
+      "gesture": "beat",
+      "rep": 5,
+      "samples": 74,
+      "duration_s": 1.62,
+      "hz": 45.7,
+      "date": "2026-04-03 16:22:51"
+    },
+    {
+      "file": "beat_006.csv",
+      "gesture": "beat",
+      "rep": 6,
+      "samples": 74,
+      "duration_s": 1.56,
+      "hz": 47.4,
+      "date": "2026-04-03 16:23:03"
+    },
+    {
+      "file": "beat_007.csv",
+      "gesture": "beat",
+      "rep": 7,
+      "samples": 79,
+      "duration_s": 1.68,
+      "hz": 47.0,
+      "date": "2026-04-03 16:23:14"
+    },
+    {
+      "file": "beat_008.csv",
+      "gesture": "beat",
+      "rep": 8,
+      "samples": 78,
+      "duration_s": 1.68,
+      "hz": 46.4,
+      "date": "2026-04-03 16:23:25"
+    },
+    {
+      "file": "beat_009.csv",
+      "gesture": "beat",
+      "rep": 9,
+      "samples": 91,
+      "duration_s": 1.98,
+      "hz": 45.9,
+      "date": "2026-04-03 16:23:34"
+    },
+    {
+      "file": "beat_010.csv",
+      "gesture": "beat",
+      "rep": 10,
+      "samples": 116,
+      "duration_s": 2.52,
+      "hz": 46.0,
+      "date": "2026-04-03 16:23:44"
+    },
+    {
+      "file": "beat_011.csv",
+      "gesture": "beat",
+      "rep": 11,
+      "samples": 99,
+      "duration_s": 2.16,
+      "hz": 45.8,
+      "date": "2026-04-03 16:23:54"
+    },
+    {
+      "file": "beat_012.csv",
+      "gesture": "beat",
+      "rep": 12,
+      "samples": 110,
+      "duration_s": 2.4,
+      "hz": 45.8,
+      "date": "2026-04-03 16:24:03"
+    },
+    {
+      "file": "beat_013.csv",
+      "gesture": "beat",
+      "rep": 13,
+      "samples": 122,
+      "duration_s": 2.64,
+      "hz": 46.2,
+      "date": "2026-04-03 16:24:12"
+    },
+    {
+      "file": "beat_014.csv",
+      "gesture": "beat",
+      "rep": 14,
+      "samples": 68,
+      "duration_s": 1.56,
+      "hz": 43.6,
+      "date": "2026-04-03 16:24:34"
+    },
+    {
+      "file": "beat_015.csv",
+      "gesture": "beat",
+      "rep": 15,
+      "samples": 83,
+      "duration_s": 1.8,
+      "hz": 46.1,
+      "date": "2026-04-03 16:24:43"
+    },
+    {
+      "file": "beat_016.csv",
+      "gesture": "beat",
+      "rep": 16,
+      "samples": 67,
+      "duration_s": 1.5,
+      "hz": 44.7,
+      "date": "2026-04-03 16:24:51"
+    },
+    {
+      "file": "beat_017.csv",
+      "gesture": "beat",
+      "rep": 17,
+      "samples": 72,
+      "duration_s": 1.56,
+      "hz": 46.1,
+      "date": "2026-04-03 16:24:59"
+    },
+    {
+      "file": "beat_018.csv",
+      "gesture": "beat",
+      "rep": 18,
+      "samples": 72,
+      "duration_s": 1.56,
+      "hz": 46.1,
+      "date": "2026-04-03 16:25:08"
+    },
+    {
+      "file": "beat_019.csv",
+      "gesture": "beat",
+      "rep": 19,
+      "samples": 65,
+      "duration_s": 1.44,
+      "hz": 45.1,
+      "date": "2026-04-03 16:25:17"
+    },
+    {
+      "file": "beat_020.csv",
+      "gesture": "beat",
+      "rep": 20,
+      "samples": 83,
+      "duration_s": 1.8,
+      "hz": 46.1,
+      "date": "2026-04-03 16:25:26"
+    },
+    {
+      "file": "stab_001.csv",
+      "gesture": "stab",
+      "rep": 1,
+      "samples": 66,
+      "duration_s": 1.44,
+      "hz": 45.8,
+      "date": "2026-04-03 16:26:15"
+    },
+    {
+      "file": "stab_002.csv",
+      "gesture": "stab",
+      "rep": 2,
+      "samples": 65,
+      "duration_s": 1.38,
+      "hz": 47.0,
+      "date": "2026-04-03 16:26:25"
+    },
+    {
+      "file": "stab_003.csv",
+      "gesture": "stab",
+      "rep": 3,
+      "samples": 66,
+      "duration_s": 1.44,
+      "hz": 45.8,
+      "date": "2026-04-03 16:26:33"
+    },
+    {
+      "file": "stab_004.csv",
+      "gesture": "stab",
+      "rep": 4,
+      "samples": 70,
+      "duration_s": 1.5,
+      "hz": 46.6,
+      "date": "2026-04-03 16:26:41"
+    },
+    {
+      "file": "stab_005.csv",
+      "gesture": "stab",
+      "rep": 5,
+      "samples": 50,
+      "duration_s": 1.08,
+      "hz": 46.2,
+      "date": "2026-04-03 16:27:22"
+    },
+    {
+      "file": "stab_006.csv",
+      "gesture": "stab",
+      "rep": 6,
+      "samples": 66,
+      "duration_s": 1.44,
+      "hz": 45.8,
+      "date": "2026-04-03 16:27:30"
+    },
+    {
+      "file": "stab_007.csv",
+      "gesture": "stab",
+      "rep": 7,
+      "samples": 72,
+      "duration_s": 1.56,
+      "hz": 46.1,
+      "date": "2026-04-03 16:27:38"
+    },
+    {
+      "file": "stab_008.csv",
+      "gesture": "stab",
+      "rep": 8,
+      "samples": 71,
+      "duration_s": 1.56,
+      "hz": 45.5,
+      "date": "2026-04-03 16:27:45"
+    },
+    {
+      "file": "stab_009.csv",
+      "gesture": "stab",
+      "rep": 9,
+      "samples": 64,
+      "duration_s": 1.38,
+      "hz": 46.3,
+      "date": "2026-04-03 16:27:53"
+    },
+    {
+      "file": "stab_010.csv",
+      "gesture": "stab",
+      "rep": 10,
+      "samples": 66,
+      "duration_s": 1.44,
+      "hz": 45.8,
+      "date": "2026-04-03 16:28:01"
+    },
+    {
+      "file": "stab_011.csv",
+      "gesture": "stab",
+      "rep": 11,
+      "samples": 53,
+      "duration_s": 1.14,
+      "hz": 46.4,
+      "date": "2026-04-03 16:28:09"
+    },
+    {
+      "file": "stab_012.csv",
+      "gesture": "stab",
+      "rep": 12,
+      "samples": 69,
+      "duration_s": 1.5,
+      "hz": 45.9,
+      "date": "2026-04-03 16:28:17"
+    },
+    {
+      "file": "stab_013.csv",
+      "gesture": "stab",
+      "rep": 13,
+      "samples": 64,
+      "duration_s": 1.38,
+      "hz": 46.3,
+      "date": "2026-04-03 16:28:26"
+    },
+    {
+      "file": "stab_014.csv",
+      "gesture": "stab",
+      "rep": 14,
+      "samples": 53,
+      "duration_s": 1.14,
+      "hz": 46.4,
+      "date": "2026-04-03 16:28:35"
+    },
+    {
+      "file": "stab_015.csv",
+      "gesture": "stab",
+      "rep": 15,
+      "samples": 65,
+      "duration_s": 1.38,
+      "hz": 47.1,
+      "date": "2026-04-03 16:28:44"
+    },
+    {
+      "file": "stab_016.csv",
+      "gesture": "stab",
+      "rep": 16,
+      "samples": 68,
+      "duration_s": 1.44,
+      "hz": 47.2,
+      "date": "2026-04-03 16:28:54"
+    },
+    {
+      "file": "stab_017.csv",
+      "gesture": "stab",
+      "rep": 17,
+      "samples": 62,
+      "duration_s": 1.32,
+      "hz": 46.9,
+      "date": "2026-04-03 16:29:01"
+    },
+    {
+      "file": "stab_018.csv",
+      "gesture": "stab",
+      "rep": 18,
+      "samples": 53,
+      "duration_s": 1.14,
+      "hz": 46.4,
+      "date": "2026-04-03 16:29:10"
+    },
+    {
+      "file": "stab_019.csv",
+      "gesture": "stab",
+      "rep": 19,
+      "samples": 61,
+      "duration_s": 1.32,
+      "hz": 46.2,
+      "date": "2026-04-03 16:29:18"
+    },
+    {
+      "file": "stab_020.csv",
+      "gesture": "stab",
+      "rep": 20,
+      "samples": 61,
+      "duration_s": 1.32,
+      "hz": 46.1,
+      "date": "2026-04-03 16:29:27"
+    },
+    {
+      "file": "spin_001.csv",
+      "gesture": "spin",
+      "rep": 1,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.1,
+      "date": "2026-04-03 16:30:13"
+    },
+    {
+      "file": "spin_002.csv",
+      "gesture": "spin",
+      "rep": 2,
+      "samples": 96,
+      "duration_s": 2.1,
+      "hz": 45.7,
+      "date": "2026-04-03 16:30:21"
+    },
+    {
+      "file": "spin_003.csv",
+      "gesture": "spin",
+      "rep": 3,
+      "samples": 144,
+      "duration_s": 3.18,
+      "hz": 45.3,
+      "date": "2026-04-03 16:30:29"
+    },
+    {
+      "file": "spin_004.csv",
+      "gesture": "spin",
+      "rep": 4,
+      "samples": 136,
+      "duration_s": 3.0,
+      "hz": 45.3,
+      "date": "2026-04-03 16:30:36"
+    },
+    {
+      "file": "spin_005.csv",
+      "gesture": "spin",
+      "rep": 5,
+      "samples": 106,
+      "duration_s": 2.34,
+      "hz": 45.3,
+      "date": "2026-04-03 16:30:42"
+    },
+    {
+      "file": "spin_006.csv",
+      "gesture": "spin",
+      "rep": 6,
+      "samples": 152,
+      "duration_s": 3.42,
+      "hz": 44.4,
+      "date": "2026-04-03 16:30:50"
+    },
+    {
+      "file": "spin_007.csv",
+      "gesture": "spin",
+      "rep": 7,
+      "samples": 127,
+      "duration_s": 2.82,
+      "hz": 45.0,
+      "date": "2026-04-03 16:30:56"
+    },
+    {
+      "file": "spin_008.csv",
+      "gesture": "spin",
+      "rep": 8,
+      "samples": 111,
+      "duration_s": 2.46,
+      "hz": 45.1,
+      "date": "2026-04-03 16:31:07"
+    },
+    {
+      "file": "spin_009.csv",
+      "gesture": "spin",
+      "rep": 9,
+      "samples": 146,
+      "duration_s": 3.24,
+      "hz": 45.0,
+      "date": "2026-04-03 16:31:16"
+    },
+    {
+      "file": "spin_010.csv",
+      "gesture": "spin",
+      "rep": 10,
+      "samples": 154,
+      "duration_s": 3.3,
+      "hz": 46.6,
+      "date": "2026-04-03 16:31:23"
+    },
+    {
+      "file": "spin_011.csv",
+      "gesture": "spin",
+      "rep": 11,
+      "samples": 114,
+      "duration_s": 2.52,
+      "hz": 45.2,
+      "date": "2026-04-03 16:31:31"
+    },
+    {
+      "file": "spin_012.csv",
+      "gesture": "spin",
+      "rep": 12,
+      "samples": 139,
+      "duration_s": 3.06,
+      "hz": 45.4,
+      "date": "2026-04-03 16:31:39"
+    },
+    {
+      "file": "spin_013.csv",
+      "gesture": "spin",
+      "rep": 13,
+      "samples": 151,
+      "duration_s": 3.36,
+      "hz": 44.9,
+      "date": "2026-04-03 16:31:46"
+    },
+    {
+      "file": "spin_014.csv",
+      "gesture": "spin",
+      "rep": 14,
+      "samples": 141,
+      "duration_s": 3.12,
+      "hz": 45.2,
+      "date": "2026-04-03 16:31:54"
+    },
+    {
+      "file": "spin_015.csv",
+      "gesture": "spin",
+      "rep": 15,
+      "samples": 146,
+      "duration_s": 3.24,
+      "hz": 45.0,
+      "date": "2026-04-03 16:32:01"
+    },
+    {
+      "file": "spin_016.csv",
+      "gesture": "spin",
+      "rep": 16,
+      "samples": 106,
+      "duration_s": 2.34,
+      "hz": 45.3,
+      "date": "2026-04-03 16:32:08"
+    },
+    {
+      "file": "spin_017.csv",
+      "gesture": "spin",
+      "rep": 17,
+      "samples": 113,
+      "duration_s": 2.52,
+      "hz": 44.8,
+      "date": "2026-04-03 16:32:16"
+    },
+    {
+      "file": "spin_018.csv",
+      "gesture": "spin",
+      "rep": 18,
+      "samples": 140,
+      "duration_s": 3.12,
+      "hz": 44.9,
+      "date": "2026-04-03 16:32:25"
+    },
+    {
+      "file": "spin_019.csv",
+      "gesture": "spin",
+      "rep": 19,
+      "samples": 127,
+      "duration_s": 2.82,
+      "hz": 45.0,
+      "date": "2026-04-03 16:32:32"
+    },
+    {
+      "file": "spin_020.csv",
+      "gesture": "spin",
+      "rep": 20,
+      "samples": 126,
+      "duration_s": 2.82,
+      "hz": 44.6,
+      "date": "2026-04-03 16:32:40"
+    },
+    {
+      "file": "slash_001.csv",
+      "gesture": "slash",
+      "rep": 1,
+      "samples": 81,
+      "duration_s": 1.8,
+      "hz": 44.9,
+      "date": "2026-04-03 16:34:21"
+    },
+    {
+      "file": "slash_002.csv",
+      "gesture": "slash",
+      "rep": 2,
+      "samples": 79,
+      "duration_s": 1.74,
+      "hz": 45.4,
+      "date": "2026-04-03 16:34:29"
+    },
+    {
+      "file": "slash_003.csv",
+      "gesture": "slash",
+      "rep": 3,
+      "samples": 69,
+      "duration_s": 1.56,
+      "hz": 44.2,
+      "date": "2026-04-03 16:34:44"
+    },
+    {
+      "file": "slash_004.csv",
+      "gesture": "slash",
+      "rep": 4,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.2,
+      "date": "2026-04-03 16:35:07"
+    },
+    {
+      "file": "slash_005.csv",
+      "gesture": "slash",
+      "rep": 5,
+      "samples": 66,
+      "duration_s": 1.44,
+      "hz": 45.8,
+      "date": "2026-04-03 16:35:16"
+    },
+    {
+      "file": "slash_006.csv",
+      "gesture": "slash",
+      "rep": 6,
+      "samples": 93,
+      "duration_s": 2.04,
+      "hz": 45.6,
+      "date": "2026-04-03 16:35:25"
+    },
+    {
+      "file": "slash_007.csv",
+      "gesture": "slash",
+      "rep": 7,
+      "samples": 68,
+      "duration_s": 1.44,
+      "hz": 47.2,
+      "date": "2026-04-03 16:35:33"
+    },
+    {
+      "file": "slash_008.csv",
+      "gesture": "slash",
+      "rep": 8,
+      "samples": 103,
+      "duration_s": 2.28,
+      "hz": 45.1,
+      "date": "2026-04-03 16:35:42"
+    },
+    {
+      "file": "slash_009.csv",
+      "gesture": "slash",
+      "rep": 9,
+      "samples": 73,
+      "duration_s": 1.62,
+      "hz": 45.0,
+      "date": "2026-04-03 16:36:10"
+    },
+    {
+      "file": "slash_010.csv",
+      "gesture": "slash",
+      "rep": 10,
+      "samples": 63,
+      "duration_s": 1.38,
+      "hz": 45.6,
+      "date": "2026-04-03 16:36:42"
+    },
+    {
+      "file": "slash_011.csv",
+      "gesture": "slash",
+      "rep": 11,
+      "samples": 63,
+      "duration_s": 1.38,
+      "hz": 45.6,
+      "date": "2026-04-03 16:36:51"
+    },
+    {
+      "file": "slash_012.csv",
+      "gesture": "slash",
+      "rep": 12,
+      "samples": 92,
+      "duration_s": 2.04,
+      "hz": 45.1,
+      "date": "2026-04-03 16:37:00"
+    },
+    {
+      "file": "slash_013.csv",
+      "gesture": "slash",
+      "rep": 13,
+      "samples": 87,
+      "duration_s": 1.92,
+      "hz": 45.3,
+      "date": "2026-04-03 16:37:09"
+    },
+    {
+      "file": "slash_014.csv",
+      "gesture": "slash",
+      "rep": 14,
+      "samples": 90,
+      "duration_s": 1.98,
+      "hz": 45.4,
+      "date": "2026-04-03 16:37:20"
+    },
+    {
+      "file": "slash_015.csv",
+      "gesture": "slash",
+      "rep": 15,
+      "samples": 74,
+      "duration_s": 1.62,
+      "hz": 45.6,
+      "date": "2026-04-03 16:37:29"
+    },
+    {
+      "file": "slash_016.csv",
+      "gesture": "slash",
+      "rep": 16,
+      "samples": 77,
+      "duration_s": 1.68,
+      "hz": 45.8,
+      "date": "2026-04-03 16:37:38"
+    },
+    {
+      "file": "slash_017.csv",
+      "gesture": "slash",
+      "rep": 17,
+      "samples": 82,
+      "duration_s": 1.8,
+      "hz": 45.5,
+      "date": "2026-04-03 16:37:47"
+    },
+    {
+      "file": "slash_018.csv",
+      "gesture": "slash",
+      "rep": 18,
+      "samples": 76,
+      "duration_s": 1.69,
+      "hz": 45.1,
+      "date": "2026-04-03 16:37:55"
+    },
+    {
+      "file": "slash_019.csv",
+      "gesture": "slash",
+      "rep": 19,
+      "samples": 95,
+      "duration_s": 2.1,
+      "hz": 45.2,
+      "date": "2026-04-03 16:38:34"
+    },
+    {
+      "file": "slash_020.csv",
+      "gesture": "slash",
+      "rep": 20,
+      "samples": 111,
+      "duration_s": 2.46,
+      "hz": 45.1,
+      "date": "2026-04-03 16:38:58"
+    },
+    {
+      "file": "infinity_001.csv",
+      "gesture": "infinity",
+      "rep": 1,
+      "samples": 170,
+      "duration_s": 3.84,
+      "hz": 44.2,
+      "date": "2026-04-03 23:05:21"
+    },
+    {
+      "file": "infinity_002.csv",
+      "gesture": "infinity",
+      "rep": 2,
+      "samples": 137,
+      "duration_s": 3.06,
+      "hz": 44.7,
+      "date": "2026-04-03 23:05:53"
+    },
+    {
+      "file": "infinity_003.csv",
+      "gesture": "infinity",
+      "rep": 3,
+      "samples": 155,
+      "duration_s": 3.48,
+      "hz": 44.5,
+      "date": "2026-04-03 23:06:01"
+    },
+    {
+      "file": "infinity_004.csv",
+      "gesture": "infinity",
+      "rep": 4,
+      "samples": 140,
+      "duration_s": 3.12,
+      "hz": 44.8,
+      "date": "2026-04-03 23:06:10"
+    },
+    {
+      "file": "infinity_005.csv",
+      "gesture": "infinity",
+      "rep": 5,
+      "samples": 160,
+      "duration_s": 3.54,
+      "hz": 45.2,
+      "date": "2026-04-03 23:06:18"
+    },
+    {
+      "file": "infinity_006.csv",
+      "gesture": "infinity",
+      "rep": 6,
+      "samples": 156,
+      "duration_s": 3.48,
+      "hz": 44.8,
+      "date": "2026-04-03 23:06:27"
+    },
+    {
+      "file": "infinity_007.csv",
+      "gesture": "infinity",
+      "rep": 7,
+      "samples": 150,
+      "duration_s": 3.36,
+      "hz": 44.6,
+      "date": "2026-04-03 23:06:35"
+    },
+    {
+      "file": "infinity_008.csv",
+      "gesture": "infinity",
+      "rep": 8,
+      "samples": 169,
+      "duration_s": 3.78,
+      "hz": 44.7,
+      "date": "2026-04-03 23:06:43"
+    },
+    {
+      "file": "infinity_009.csv",
+      "gesture": "infinity",
+      "rep": 9,
+      "samples": 156,
+      "duration_s": 3.48,
+      "hz": 44.8,
+      "date": "2026-04-03 23:06:51"
+    },
+    {
+      "file": "infinity_010.csv",
+      "gesture": "infinity",
+      "rep": 10,
+      "samples": 161,
+      "duration_s": 3.6,
+      "hz": 44.7,
+      "date": "2026-04-03 23:06:58"
+    },
+    {
+      "file": "infinity_011.csv",
+      "gesture": "infinity",
+      "rep": 11,
+      "samples": 147,
+      "duration_s": 3.36,
+      "hz": 43.8,
+      "date": "2026-04-03 23:07:06"
+    },
+    {
+      "file": "infinity_012.csv",
+      "gesture": "infinity",
+      "rep": 12,
+      "samples": 161,
+      "duration_s": 3.54,
+      "hz": 45.5,
+      "date": "2026-04-03 23:07:28"
+    },
+    {
+      "file": "infinity_013.csv",
+      "gesture": "infinity",
+      "rep": 13,
+      "samples": 164,
+      "duration_s": 3.66,
+      "hz": 44.8,
+      "date": "2026-04-03 23:07:36"
+    },
+    {
+      "file": "infinity_014.csv",
+      "gesture": "infinity",
+      "rep": 14,
+      "samples": 166,
+      "duration_s": 3.72,
+      "hz": 44.6,
+      "date": "2026-04-03 23:07:43"
+    },
+    {
+      "file": "infinity_015.csv",
+      "gesture": "infinity",
+      "rep": 15,
+      "samples": 168,
+      "duration_s": 3.78,
+      "hz": 44.4,
+      "date": "2026-04-03 23:07:52"
+    },
+    {
+      "file": "infinity_016.csv",
+      "gesture": "infinity",
+      "rep": 16,
+      "samples": 151,
+      "duration_s": 3.36,
+      "hz": 44.9,
+      "date": "2026-04-03 23:08:00"
+    },
+    {
+      "file": "infinity_017.csv",
+      "gesture": "infinity",
+      "rep": 17,
+      "samples": 136,
+      "duration_s": 3.12,
+      "hz": 43.6,
+      "date": "2026-04-03 23:08:12"
+    },
+    {
+      "file": "infinity_018.csv",
+      "gesture": "infinity",
+      "rep": 18,
+      "samples": 187,
+      "duration_s": 4.14,
+      "hz": 45.1,
+      "date": "2026-04-03 23:08:20"
+    },
+    {
+      "file": "infinity_019.csv",
+      "gesture": "infinity",
+      "rep": 19,
+      "samples": 170,
+      "duration_s": 3.78,
+      "hz": 45.0,
+      "date": "2026-04-03 23:08:28"
+    },
+    {
+      "file": "infinity_020.csv",
+      "gesture": "infinity",
+      "rep": 20,
+      "samples": 181,
+      "duration_s": 4.02,
+      "hz": 45.0,
+      "date": "2026-04-03 23:08:36"
+    },
+    {
+      "file": "shake_001.csv",
+      "gesture": "shake",
+      "rep": 1,
+      "samples": 93,
+      "duration_s": 2.04,
+      "hz": 45.5,
+      "date": "2026-04-03 23:10:39"
+    },
+    {
+      "file": "shake_002.csv",
+      "gesture": "shake",
+      "rep": 2,
+      "samples": 94,
+      "duration_s": 2.1,
+      "hz": 44.7,
+      "date": "2026-04-03 23:10:50"
+    },
+    {
+      "file": "shake_003.csv",
+      "gesture": "shake",
+      "rep": 3,
+      "samples": 84,
+      "duration_s": 1.86,
+      "hz": 45.2,
+      "date": "2026-04-03 23:11:00"
+    },
+    {
+      "file": "shake_004.csv",
+      "gesture": "shake",
+      "rep": 4,
+      "samples": 79,
+      "duration_s": 1.75,
+      "hz": 45.3,
+      "date": "2026-04-03 23:11:11"
+    },
+    {
+      "file": "shake_005.csv",
+      "gesture": "shake",
+      "rep": 5,
+      "samples": 89,
+      "duration_s": 2.04,
+      "hz": 43.6,
+      "date": "2026-04-03 23:11:22"
+    },
+    {
+      "file": "shake_006.csv",
+      "gesture": "shake",
+      "rep": 6,
+      "samples": 104,
+      "duration_s": 2.34,
+      "hz": 44.4,
+      "date": "2026-04-03 23:11:33"
+    },
+    {
+      "file": "shake_007.csv",
+      "gesture": "shake",
+      "rep": 7,
+      "samples": 147,
+      "duration_s": 3.24,
+      "hz": 45.4,
+      "date": "2026-04-03 23:11:44"
+    },
+    {
+      "file": "shake_008.csv",
+      "gesture": "shake",
+      "rep": 8,
+      "samples": 97,
+      "duration_s": 2.16,
+      "hz": 44.8,
+      "date": "2026-04-03 23:11:56"
+    },
+    {
+      "file": "shake_009.csv",
+      "gesture": "shake",
+      "rep": 9,
+      "samples": 113,
+      "duration_s": 2.58,
+      "hz": 43.8,
+      "date": "2026-04-03 23:12:05"
+    },
+    {
+      "file": "shake_010.csv",
+      "gesture": "shake",
+      "rep": 10,
+      "samples": 79,
+      "duration_s": 1.74,
+      "hz": 45.3,
+      "date": "2026-04-03 23:12:13"
+    },
+    {
+      "file": "shake_011.csv",
+      "gesture": "shake",
+      "rep": 11,
+      "samples": 87,
+      "duration_s": 1.92,
+      "hz": 45.3,
+      "date": "2026-04-03 23:12:21"
+    },
+    {
+      "file": "shake_012.csv",
+      "gesture": "shake",
+      "rep": 12,
+      "samples": 100,
+      "duration_s": 2.22,
+      "hz": 45.0,
+      "date": "2026-04-03 23:12:30"
+    },
+    {
+      "file": "shake_013.csv",
+      "gesture": "shake",
+      "rep": 13,
+      "samples": 91,
+      "duration_s": 2.04,
+      "hz": 44.6,
+      "date": "2026-04-03 23:12:39"
+    },
+    {
+      "file": "shake_014.csv",
+      "gesture": "shake",
+      "rep": 14,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.2,
+      "date": "2026-04-03 23:12:50"
+    },
+    {
+      "file": "shake_015.csv",
+      "gesture": "shake",
+      "rep": 15,
+      "samples": 83,
+      "duration_s": 1.86,
+      "hz": 44.6,
+      "date": "2026-04-03 23:12:59"
+    },
+    {
+      "file": "shake_016.csv",
+      "gesture": "shake",
+      "rep": 16,
+      "samples": 89,
+      "duration_s": 1.98,
+      "hz": 44.9,
+      "date": "2026-04-03 23:13:07"
+    },
+    {
+      "file": "shake_017.csv",
+      "gesture": "shake",
+      "rep": 17,
+      "samples": 83,
+      "duration_s": 1.8,
+      "hz": 46.1,
+      "date": "2026-04-03 23:13:17"
+    },
+    {
+      "file": "shake_018.csv",
+      "gesture": "shake",
+      "rep": 18,
+      "samples": 86,
+      "duration_s": 1.92,
+      "hz": 44.8,
+      "date": "2026-04-03 23:13:25"
+    },
+    {
+      "file": "shake_019.csv",
+      "gesture": "shake",
+      "rep": 19,
+      "samples": 110,
+      "duration_s": 2.46,
+      "hz": 44.7,
+      "date": "2026-04-03 23:13:34"
+    },
+    {
+      "file": "shake_020.csv",
+      "gesture": "shake",
+      "rep": 20,
+      "samples": 105,
+      "duration_s": 2.34,
+      "hz": 44.9,
+      "date": "2026-04-03 23:13:43"
+    },
+    {
+      "file": "flick_001.csv",
+      "gesture": "flick",
+      "rep": 1,
+      "samples": 61,
+      "duration_s": 1.38,
+      "hz": 44.2,
+      "date": "2026-04-03 23:21:53"
+    },
+    {
+      "file": "flick_002.csv",
+      "gesture": "flick",
+      "rep": 2,
+      "samples": 65,
+      "duration_s": 1.44,
+      "hz": 45.1,
+      "date": "2026-04-03 23:21:59"
+    },
+    {
+      "file": "flick_003.csv",
+      "gesture": "flick",
+      "rep": 3,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.2,
+      "date": "2026-04-03 23:22:05"
+    },
+    {
+      "file": "flick_004.csv",
+      "gesture": "flick",
+      "rep": 4,
+      "samples": 65,
+      "duration_s": 1.44,
+      "hz": 45.1,
+      "date": "2026-04-03 23:22:11"
+    },
+    {
+      "file": "flick_005.csv",
+      "gesture": "flick",
+      "rep": 5,
+      "samples": 90,
+      "duration_s": 1.98,
+      "hz": 45.4,
+      "date": "2026-04-03 23:22:18"
+    },
+    {
+      "file": "flick_006.csv",
+      "gesture": "flick",
+      "rep": 6,
+      "samples": 67,
+      "duration_s": 1.5,
+      "hz": 44.6,
+      "date": "2026-04-03 23:22:26"
+    },
+    {
+      "file": "flick_007.csv",
+      "gesture": "flick",
+      "rep": 7,
+      "samples": 60,
+      "duration_s": 1.32,
+      "hz": 45.4,
+      "date": "2026-04-03 23:22:32"
+    },
+    {
+      "file": "flick_008.csv",
+      "gesture": "flick",
+      "rep": 8,
+      "samples": 66,
+      "duration_s": 1.44,
+      "hz": 45.8,
+      "date": "2026-04-03 23:22:41"
+    },
+    {
+      "file": "flick_009.csv",
+      "gesture": "flick",
+      "rep": 9,
+      "samples": 64,
+      "duration_s": 1.44,
+      "hz": 44.4,
+      "date": "2026-04-03 23:22:49"
+    },
+    {
+      "file": "flick_010.csv",
+      "gesture": "flick",
+      "rep": 10,
+      "samples": 74,
+      "duration_s": 1.62,
+      "hz": 45.6,
+      "date": "2026-04-03 23:23:01"
+    },
+    {
+      "file": "flick_011.csv",
+      "gesture": "flick",
+      "rep": 11,
+      "samples": 73,
+      "duration_s": 1.56,
+      "hz": 46.8,
+      "date": "2026-04-03 23:23:10"
+    },
+    {
+      "file": "flick_012.csv",
+      "gesture": "flick",
+      "rep": 12,
+      "samples": 92,
+      "duration_s": 2.04,
+      "hz": 45.1,
+      "date": "2026-04-03 23:23:19"
+    },
+    {
+      "file": "flick_013.csv",
+      "gesture": "flick",
+      "rep": 13,
+      "samples": 79,
+      "duration_s": 1.86,
+      "hz": 42.5,
+      "date": "2026-04-03 23:23:28"
+    },
+    {
+      "file": "flick_014.csv",
+      "gesture": "flick",
+      "rep": 14,
+      "samples": 82,
+      "duration_s": 1.8,
+      "hz": 45.5,
+      "date": "2026-04-03 23:23:38"
+    },
+    {
+      "file": "flick_015.csv",
+      "gesture": "flick",
+      "rep": 15,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.2,
+      "date": "2026-04-03 23:23:47"
+    },
+    {
+      "file": "flick_016.csv",
+      "gesture": "flick",
+      "rep": 16,
+      "samples": 73,
+      "duration_s": 1.62,
+      "hz": 45.0,
+      "date": "2026-04-03 23:23:55"
+    },
+    {
+      "file": "flick_017.csv",
+      "gesture": "flick",
+      "rep": 17,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.2,
+      "date": "2026-04-03 23:24:04"
+    },
+    {
+      "file": "flick_018.csv",
+      "gesture": "flick",
+      "rep": 18,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.2,
+      "date": "2026-04-03 23:24:13"
+    },
+    {
+      "file": "flick_019.csv",
+      "gesture": "flick",
+      "rep": 19,
+      "samples": 63,
+      "duration_s": 1.38,
+      "hz": 45.6,
+      "date": "2026-04-03 23:24:22"
+    },
+    {
+      "file": "flick_020.csv",
+      "gesture": "flick",
+      "rep": 20,
+      "samples": 86,
+      "duration_s": 1.92,
+      "hz": 44.8,
+      "date": "2026-04-03 23:24:31"
+    },
+    {
+      "file": "wing_001.csv",
+      "gesture": "wing",
+      "rep": 1,
+      "samples": 88,
+      "duration_s": 1.92,
+      "hz": 45.8,
+      "date": "2026-04-03 23:26:14"
+    },
+    {
+      "file": "wing_002.csv",
+      "gesture": "wing",
+      "rep": 2,
+      "samples": 107,
+      "duration_s": 2.34,
+      "hz": 45.7,
+      "date": "2026-04-03 23:26:23"
+    },
+    {
+      "file": "wing_003.csv",
+      "gesture": "wing",
+      "rep": 3,
+      "samples": 84,
+      "duration_s": 1.86,
+      "hz": 45.1,
+      "date": "2026-04-03 23:26:32"
+    },
+    {
+      "file": "wing_004.csv",
+      "gesture": "wing",
+      "rep": 4,
+      "samples": 110,
+      "duration_s": 2.46,
+      "hz": 44.7,
+      "date": "2026-04-03 23:26:42"
+    },
+    {
+      "file": "wing_005.csv",
+      "gesture": "wing",
+      "rep": 5,
+      "samples": 93,
+      "duration_s": 2.04,
+      "hz": 45.6,
+      "date": "2026-04-03 23:26:52"
+    },
+    {
+      "file": "wing_006.csv",
+      "gesture": "wing",
+      "rep": 6,
+      "samples": 116,
+      "duration_s": 2.64,
+      "hz": 43.9,
+      "date": "2026-04-03 23:27:03"
+    },
+    {
+      "file": "wing_007.csv",
+      "gesture": "wing",
+      "rep": 7,
+      "samples": 105,
+      "duration_s": 2.34,
+      "hz": 44.8,
+      "date": "2026-04-03 23:27:13"
+    },
+    {
+      "file": "wing_008.csv",
+      "gesture": "wing",
+      "rep": 8,
+      "samples": 107,
+      "duration_s": 2.4,
+      "hz": 44.6,
+      "date": "2026-04-03 23:27:26"
+    },
+    {
+      "file": "wing_009.csv",
+      "gesture": "wing",
+      "rep": 9,
+      "samples": 126,
+      "duration_s": 2.82,
+      "hz": 44.7,
+      "date": "2026-04-03 23:27:36"
+    },
+    {
+      "file": "wing_010.csv",
+      "gesture": "wing",
+      "rep": 10,
+      "samples": 110,
+      "duration_s": 2.46,
+      "hz": 44.7,
+      "date": "2026-04-03 23:27:46"
+    },
+    {
+      "file": "wing_011.csv",
+      "gesture": "wing",
+      "rep": 11,
+      "samples": 121,
+      "duration_s": 2.7,
+      "hz": 44.8,
+      "date": "2026-04-03 23:28:14"
+    },
+    {
+      "file": "wing_012.csv",
+      "gesture": "wing",
+      "rep": 12,
+      "samples": 131,
+      "duration_s": 2.94,
+      "hz": 44.5,
+      "date": "2026-04-03 23:28:24"
+    },
+    {
+      "file": "wing_013.csv",
+      "gesture": "wing",
+      "rep": 13,
+      "samples": 119,
+      "duration_s": 2.64,
+      "hz": 45.1,
+      "date": "2026-04-03 23:28:33"
+    },
+    {
+      "file": "wing_014.csv",
+      "gesture": "wing",
+      "rep": 14,
+      "samples": 136,
+      "duration_s": 3.06,
+      "hz": 44.4,
+      "date": "2026-04-03 23:28:44"
+    },
+    {
+      "file": "wing_015.csv",
+      "gesture": "wing",
+      "rep": 15,
+      "samples": 108,
+      "duration_s": 2.4,
+      "hz": 45.0,
+      "date": "2026-04-03 23:28:54"
+    },
+    {
+      "file": "wing_016.csv",
+      "gesture": "wing",
+      "rep": 16,
+      "samples": 108,
+      "duration_s": 2.4,
+      "hz": 45.0,
+      "date": "2026-04-03 23:29:05"
+    },
+    {
+      "file": "wing_017.csv",
+      "gesture": "wing",
+      "rep": 17,
+      "samples": 135,
+      "duration_s": 3.06,
+      "hz": 44.1,
+      "date": "2026-04-03 23:29:16"
+    },
+    {
+      "file": "wing_018.csv",
+      "gesture": "wing",
+      "rep": 18,
+      "samples": 101,
+      "duration_s": 2.28,
+      "hz": 44.3,
+      "date": "2026-04-03 23:29:25"
+    },
+    {
+      "file": "wing_019.csv",
+      "gesture": "wing",
+      "rep": 19,
+      "samples": 115,
+      "duration_s": 2.58,
+      "hz": 44.6,
+      "date": "2026-04-03 23:29:35"
+    },
+    {
+      "file": "wing_020.csv",
+      "gesture": "wing",
+      "rep": 20,
+      "samples": 137,
+      "duration_s": 3.06,
+      "hz": 44.8,
+      "date": "2026-04-03 23:29:46"
+    },
+    {
+      "file": "slope_001.csv",
+      "gesture": "slope",
+      "rep": 1,
+      "samples": 84,
+      "duration_s": 1.86,
+      "hz": 45.1,
+      "date": "2026-04-03 23:41:23"
+    },
+    {
+      "file": "slope_002.csv",
+      "gesture": "slope",
+      "rep": 2,
+      "samples": 79,
+      "duration_s": 1.74,
+      "hz": 45.4,
+      "date": "2026-04-03 23:41:32"
+    },
+    {
+      "file": "slope_003.csv",
+      "gesture": "slope",
+      "rep": 3,
+      "samples": 100,
+      "duration_s": 2.22,
+      "hz": 45.0,
+      "date": "2026-04-03 23:41:42"
+    },
+    {
+      "file": "slope_004.csv",
+      "gesture": "slope",
+      "rep": 4,
+      "samples": 101,
+      "duration_s": 2.22,
+      "hz": 45.5,
+      "date": "2026-04-03 23:42:18"
+    },
+    {
+      "file": "slope_005.csv",
+      "gesture": "slope",
+      "rep": 5,
+      "samples": 106,
+      "duration_s": 2.34,
+      "hz": 45.3,
+      "date": "2026-04-03 23:42:27"
+    },
+    {
+      "file": "slope_006.csv",
+      "gesture": "slope",
+      "rep": 6,
+      "samples": 113,
+      "duration_s": 2.52,
+      "hz": 44.8,
+      "date": "2026-04-03 23:42:38"
+    },
+    {
+      "file": "slope_007.csv",
+      "gesture": "slope",
+      "rep": 7,
+      "samples": 117,
+      "duration_s": 2.58,
+      "hz": 45.3,
+      "date": "2026-04-03 23:42:47"
+    },
+    {
+      "file": "slope_008.csv",
+      "gesture": "slope",
+      "rep": 8,
+      "samples": 84,
+      "duration_s": 1.86,
+      "hz": 45.1,
+      "date": "2026-04-03 23:42:57"
+    },
+    {
+      "file": "slope_009.csv",
+      "gesture": "slope",
+      "rep": 9,
+      "samples": 95,
+      "duration_s": 2.1,
+      "hz": 45.2,
+      "date": "2026-04-03 23:43:07"
+    },
+    {
+      "file": "slope_010.csv",
+      "gesture": "slope",
+      "rep": 10,
+      "samples": 113,
+      "duration_s": 2.52,
+      "hz": 44.8,
+      "date": "2026-04-03 23:43:19"
+    },
+    {
+      "file": "slope_011.csv",
+      "gesture": "slope",
+      "rep": 11,
+      "samples": 114,
+      "duration_s": 2.52,
+      "hz": 45.2,
+      "date": "2026-04-03 23:43:29"
+    },
+    {
+      "file": "slope_012.csv",
+      "gesture": "slope",
+      "rep": 12,
+      "samples": 106,
+      "duration_s": 2.4,
+      "hz": 44.2,
+      "date": "2026-04-03 23:43:38"
+    },
+    {
+      "file": "slope_013.csv",
+      "gesture": "slope",
+      "rep": 13,
+      "samples": 100,
+      "duration_s": 2.22,
+      "hz": 45.0,
+      "date": "2026-04-03 23:43:49"
+    },
+    {
+      "file": "slope_014.csv",
+      "gesture": "slope",
+      "rep": 14,
+      "samples": 105,
+      "duration_s": 2.46,
+      "hz": 42.7,
+      "date": "2026-04-03 23:43:59"
+    },
+    {
+      "file": "slope_015.csv",
+      "gesture": "slope",
+      "rep": 15,
+      "samples": 99,
+      "duration_s": 2.16,
+      "hz": 45.8,
+      "date": "2026-04-03 23:44:09"
+    },
+    {
+      "file": "slope_016.csv",
+      "gesture": "slope",
+      "rep": 16,
+      "samples": 111,
+      "duration_s": 2.46,
+      "hz": 45.1,
+      "date": "2026-04-03 23:44:21"
+    },
+    {
+      "file": "slope_017.csv",
+      "gesture": "slope",
+      "rep": 17,
+      "samples": 87,
+      "duration_s": 1.92,
+      "hz": 45.3,
+      "date": "2026-04-03 23:44:34"
+    },
+    {
+      "file": "slope_018.csv",
+      "gesture": "slope",
+      "rep": 18,
+      "samples": 105,
+      "duration_s": 2.34,
+      "hz": 44.9,
+      "date": "2026-04-03 23:44:45"
+    },
+    {
+      "file": "slope_019.csv",
+      "gesture": "slope",
+      "rep": 19,
+      "samples": 97,
+      "duration_s": 2.22,
+      "hz": 43.7,
+      "date": "2026-04-03 23:44:55"
+    },
+    {
+      "file": "slope_020.csv",
+      "gesture": "slope",
+      "rep": 20,
+      "samples": 97,
+      "duration_s": 2.1,
+      "hz": 46.2,
+      "date": "2026-04-03 23:45:04"
+    },
+    {
+      "file": "idle_001.csv",
+      "gesture": "idle",
+      "rep": 1,
+      "samples": 107,
+      "duration_s": 2.34,
+      "hz": 45.7,
+      "date": "2026-04-03 23:46:10"
+    },
+    {
+      "file": "idle_002.csv",
+      "gesture": "idle",
+      "rep": 2,
+      "samples": 126,
+      "duration_s": 2.76,
+      "hz": 45.6,
+      "date": "2026-04-03 23:46:31"
+    },
+    {
+      "file": "idle_003.csv",
+      "gesture": "idle",
+      "rep": 3,
+      "samples": 92,
+      "duration_s": 1.98,
+      "hz": 46.4,
+      "date": "2026-04-03 23:46:44"
+    },
+    {
+      "file": "idle_004.csv",
+      "gesture": "idle",
+      "rep": 4,
+      "samples": 106,
+      "duration_s": 2.34,
+      "hz": 45.3,
+      "date": "2026-04-03 23:46:51"
+    },
+    {
+      "file": "idle_005.csv",
+      "gesture": "idle",
+      "rep": 5,
+      "samples": 99,
+      "duration_s": 2.16,
+      "hz": 45.8,
+      "date": "2026-04-03 23:46:57"
+    },
+    {
+      "file": "idle_006.csv",
+      "gesture": "idle",
+      "rep": 6,
+      "samples": 125,
+      "duration_s": 2.7,
+      "hz": 46.3,
+      "date": "2026-04-03 23:47:05"
+    },
+    {
+      "file": "idle_007.csv",
+      "gesture": "idle",
+      "rep": 7,
+      "samples": 129,
+      "duration_s": 2.82,
+      "hz": 45.7,
+      "date": "2026-04-03 23:47:13"
+    },
+    {
+      "file": "idle_008.csv",
+      "gesture": "idle",
+      "rep": 8,
+      "samples": 120,
+      "duration_s": 2.64,
+      "hz": 45.4,
+      "date": "2026-04-03 23:47:20"
+    },
+    {
+      "file": "idle_009.csv",
+      "gesture": "idle",
+      "rep": 9,
+      "samples": 116,
+      "duration_s": 2.52,
+      "hz": 46.0,
+      "date": "2026-04-03 23:47:27"
+    },
+    {
+      "file": "idle_010.csv",
+      "gesture": "idle",
+      "rep": 10,
+      "samples": 110,
+      "duration_s": 2.4,
+      "hz": 45.8,
+      "date": "2026-04-03 23:47:33"
+    },
+    {
+      "file": "idle_011.csv",
+      "gesture": "idle",
+      "rep": 11,
+      "samples": 90,
+      "duration_s": 1.98,
+      "hz": 45.4,
+      "date": "2026-04-03 23:47:46"
+    },
+    {
+      "file": "idle_012.csv",
+      "gesture": "idle",
+      "rep": 12,
+      "samples": 93,
+      "duration_s": 2.1,
+      "hz": 44.3,
+      "date": "2026-04-03 23:47:52"
+    },
+    {
+      "file": "idle_013.csv",
+      "gesture": "idle",
+      "rep": 13,
+      "samples": 98,
+      "duration_s": 2.16,
+      "hz": 45.4,
+      "date": "2026-04-03 23:47:58"
+    },
+    {
+      "file": "idle_014.csv",
+      "gesture": "idle",
+      "rep": 14,
+      "samples": 100,
+      "duration_s": 2.22,
+      "hz": 45.0,
+      "date": "2026-04-03 23:48:03"
+    },
+    {
+      "file": "idle_015.csv",
+      "gesture": "idle",
+      "rep": 15,
+      "samples": 94,
+      "duration_s": 2.04,
+      "hz": 46.0,
+      "date": "2026-04-03 23:48:09"
+    },
+    {
+      "file": "idle_016.csv",
+      "gesture": "idle",
+      "rep": 16,
+      "samples": 118,
+      "duration_s": 2.64,
+      "hz": 44.7,
+      "date": "2026-04-03 23:48:15"
+    },
+    {
+      "file": "idle_017.csv",
+      "gesture": "idle",
+      "rep": 17,
+      "samples": 81,
+      "duration_s": 1.8,
+      "hz": 45.0,
+      "date": "2026-04-03 23:48:20"
+    },
+    {
+      "file": "idle_018.csv",
+      "gesture": "idle",
+      "rep": 18,
+      "samples": 85,
+      "duration_s": 1.98,
+      "hz": 42.9,
+      "date": "2026-04-03 23:48:24"
+    },
+    {
+      "file": "idle_019.csv",
+      "gesture": "idle",
+      "rep": 19,
+      "samples": 101,
+      "duration_s": 2.28,
+      "hz": 44.3,
+      "date": "2026-04-03 23:48:29"
+    },
+    {
+      "file": "idle_020.csv",
+      "gesture": "idle",
+      "rep": 20,
+      "samples": 108,
+      "duration_s": 2.4,
+      "hz": 45.0,
+      "date": "2026-04-03 23:48:34"
+    },
+    {
+      "file": "idle_021.csv",
+      "gesture": "idle",
+      "rep": 21,
+      "samples": 91,
+      "duration_s": 1.98,
+      "hz": 46.0,
+      "date": "2026-04-03 23:48:45"
+    },
+    {
+      "file": "idle_022.csv",
+      "gesture": "idle",
+      "rep": 22,
+      "samples": 104,
+      "duration_s": 2.22,
+      "hz": 46.8,
+      "date": "2026-04-03 23:48:52"
+    },
+    {
+      "file": "idle_023.csv",
+      "gesture": "idle",
+      "rep": 23,
+      "samples": 166,
+      "duration_s": 3.6,
+      "hz": 46.1,
+      "date": "2026-04-03 23:49:01"
+    },
+    {
+      "file": "idle_024.csv",
+      "gesture": "idle",
+      "rep": 24,
+      "samples": 63,
+      "duration_s": 1.26,
+      "hz": 49.9,
+      "date": "2026-04-03 23:49:14"
+    },
+    {
+      "file": "idle_025.csv",
+      "gesture": "idle",
+      "rep": 25,
+      "samples": 113,
+      "duration_s": 2.46,
+      "hz": 45.9,
+      "date": "2026-04-03 23:49:20"
+    },
+    {
+      "file": "idle_026.csv",
+      "gesture": "idle",
+      "rep": 26,
+      "samples": 106,
+      "duration_s": 2.28,
+      "hz": 46.5,
+      "date": "2026-04-03 23:49:27"
+    },
+    {
+      "file": "idle_027.csv",
+      "gesture": "idle",
+      "rep": 27,
+      "samples": 115,
+      "duration_s": 2.46,
+      "hz": 46.7,
+      "date": "2026-04-03 23:49:35"
+    },
+    {
+      "file": "idle_028.csv",
+      "gesture": "idle",
+      "rep": 28,
+      "samples": 120,
+      "duration_s": 2.58,
+      "hz": 46.5,
+      "date": "2026-04-03 23:49:42"
+    },
+    {
+      "file": "idle_029.csv",
+      "gesture": "idle",
+      "rep": 29,
+      "samples": 98,
+      "duration_s": 2.1,
+      "hz": 46.6,
+      "date": "2026-04-03 23:49:48"
+    },
+    {
+      "file": "idle_030.csv",
+      "gesture": "idle",
+      "rep": 30,
+      "samples": 102,
+      "duration_s": 2.16,
+      "hz": 47.1,
+      "date": "2026-04-03 23:49:52"
+    }
+  ]
+}

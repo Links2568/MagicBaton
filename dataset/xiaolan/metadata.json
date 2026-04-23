@@ -1,0 +1,1264 @@
+{
+  "sessions": [
+    {
+      "file": "beat_001.csv",
+      "gesture": "beat",
+      "rep": 1,
+      "samples": 48,
+      "duration_s": 1.08,
+      "hz": 44.4,
+      "date": "2026-04-11 15:20:41"
+    },
+    {
+      "file": "beat_002.csv",
+      "gesture": "beat",
+      "rep": 2,
+      "samples": 45,
+      "duration_s": 0.93,
+      "hz": 48.4,
+      "date": "2026-04-11 15:20:48"
+    },
+    {
+      "file": "beat_003.csv",
+      "gesture": "beat",
+      "rep": 3,
+      "samples": 38,
+      "duration_s": 0.84,
+      "hz": 45.3,
+      "date": "2026-04-11 15:20:50"
+    },
+    {
+      "file": "stab_001.csv",
+      "gesture": "stab",
+      "rep": 1,
+      "samples": 50,
+      "duration_s": 1.11,
+      "hz": 45.0,
+      "date": "2026-04-11 15:21:11"
+    },
+    {
+      "file": "spin_001.csv",
+      "gesture": "spin",
+      "rep": 1,
+      "samples": 56,
+      "duration_s": 1.26,
+      "hz": 44.4,
+      "date": "2026-04-11 15:21:22"
+    },
+    {
+      "file": "spin_002.csv",
+      "gesture": "spin",
+      "rep": 2,
+      "samples": 58,
+      "duration_s": 1.26,
+      "hz": 46.0,
+      "date": "2026-04-11 15:21:24"
+    },
+    {
+      "file": "spin_003.csv",
+      "gesture": "spin",
+      "rep": 3,
+      "samples": 46,
+      "duration_s": 1.02,
+      "hz": 45.0,
+      "date": "2026-04-11 15:21:29"
+    },
+    {
+      "file": "spin_004.csv",
+      "gesture": "spin",
+      "rep": 4,
+      "samples": 49,
+      "duration_s": 1.08,
+      "hz": 45.3,
+      "date": "2026-04-11 15:21:30"
+    },
+    {
+      "file": "slash_001.csv",
+      "gesture": "slash",
+      "rep": 1,
+      "samples": 40,
+      "duration_s": 0.87,
+      "hz": 46.1,
+      "date": "2026-04-11 15:21:42"
+    },
+    {
+      "file": "slash_002.csv",
+      "gesture": "slash",
+      "rep": 2,
+      "samples": 41,
+      "duration_s": 0.9,
+      "hz": 45.5,
+      "date": "2026-04-11 15:21:44"
+    },
+    {
+      "file": "shake_001.csv",
+      "gesture": "shake",
+      "rep": 1,
+      "samples": 50,
+      "duration_s": 1.11,
+      "hz": 44.9,
+      "date": "2026-04-11 15:21:54"
+    },
+    {
+      "file": "shake_002.csv",
+      "gesture": "shake",
+      "rep": 2,
+      "samples": 65,
+      "duration_s": 1.47,
+      "hz": 44.3,
+      "date": "2026-04-11 15:21:56"
+    },
+    {
+      "file": "flick_001.csv",
+      "gesture": "flick",
+      "rep": 1,
+      "samples": 47,
+      "duration_s": 1.05,
+      "hz": 44.8,
+      "date": "2026-04-11 15:22:04"
+    },
+    {
+      "file": "flick_002.csv",
+      "gesture": "flick",
+      "rep": 2,
+      "samples": 46,
+      "duration_s": 1.02,
+      "hz": 44.9,
+      "date": "2026-04-11 15:22:06"
+    },
+    {
+      "file": "wing_001.csv",
+      "gesture": "wing",
+      "rep": 1,
+      "samples": 59,
+      "duration_s": 1.32,
+      "hz": 44.6,
+      "date": "2026-04-11 15:22:14"
+    },
+    {
+      "file": "wing_002.csv",
+      "gesture": "wing",
+      "rep": 2,
+      "samples": 45,
+      "duration_s": 0.99,
+      "hz": 45.4,
+      "date": "2026-04-11 15:22:16"
+    },
+    {
+      "file": "beat_004.csv",
+      "gesture": "beat",
+      "rep": 4,
+      "samples": 50,
+      "duration_s": 1.08,
+      "hz": 46.3,
+      "date": "2026-04-11 15:22:49"
+    },
+    {
+      "file": "beat_005.csv",
+      "gesture": "beat",
+      "rep": 5,
+      "samples": 53,
+      "duration_s": 1.17,
+      "hz": 45.3,
+      "date": "2026-04-11 15:22:53"
+    },
+    {
+      "file": "stab_002.csv",
+      "gesture": "stab",
+      "rep": 2,
+      "samples": 53,
+      "duration_s": 1.2,
+      "hz": 44.2,
+      "date": "2026-04-11 15:22:58"
+    },
+    {
+      "file": "stab_003.csv",
+      "gesture": "stab",
+      "rep": 3,
+      "samples": 48,
+      "duration_s": 1.08,
+      "hz": 44.4,
+      "date": "2026-04-11 15:23:01"
+    },
+    {
+      "file": "spin_005.csv",
+      "gesture": "spin",
+      "rep": 5,
+      "samples": 69,
+      "duration_s": 1.56,
+      "hz": 44.2,
+      "date": "2026-04-11 15:23:07"
+    },
+    {
+      "file": "spin_006.csv",
+      "gesture": "spin",
+      "rep": 6,
+      "samples": 63,
+      "duration_s": 1.41,
+      "hz": 44.7,
+      "date": "2026-04-11 15:23:10"
+    },
+    {
+      "file": "spin_007.csv",
+      "gesture": "spin",
+      "rep": 7,
+      "samples": 59,
+      "duration_s": 1.32,
+      "hz": 44.7,
+      "date": "2026-04-11 15:23:13"
+    },
+    {
+      "file": "slash_003.csv",
+      "gesture": "slash",
+      "rep": 3,
+      "samples": 54,
+      "duration_s": 1.2,
+      "hz": 45.0,
+      "date": "2026-04-11 15:23:18"
+    },
+    {
+      "file": "slash_004.csv",
+      "gesture": "slash",
+      "rep": 4,
+      "samples": 54,
+      "duration_s": 1.17,
+      "hz": 46.2,
+      "date": "2026-04-11 15:23:21"
+    },
+    {
+      "file": "slash_005.csv",
+      "gesture": "slash",
+      "rep": 5,
+      "samples": 68,
+      "duration_s": 1.5,
+      "hz": 45.4,
+      "date": "2026-04-11 15:23:24"
+    },
+    {
+      "file": "slash_006.csv",
+      "gesture": "slash",
+      "rep": 6,
+      "samples": 58,
+      "duration_s": 1.29,
+      "hz": 44.9,
+      "date": "2026-04-11 15:23:26"
+    },
+    {
+      "file": "shake_003.csv",
+      "gesture": "shake",
+      "rep": 3,
+      "samples": 66,
+      "duration_s": 1.47,
+      "hz": 45.0,
+      "date": "2026-04-11 15:23:32"
+    },
+    {
+      "file": "shake_004.csv",
+      "gesture": "shake",
+      "rep": 4,
+      "samples": 125,
+      "duration_s": 2.82,
+      "hz": 44.4,
+      "date": "2026-04-11 15:23:36"
+    },
+    {
+      "file": "shake_005.csv",
+      "gesture": "shake",
+      "rep": 5,
+      "samples": 63,
+      "duration_s": 1.41,
+      "hz": 44.7,
+      "date": "2026-04-11 15:23:39"
+    },
+    {
+      "file": "flick_003.csv",
+      "gesture": "flick",
+      "rep": 3,
+      "samples": 73,
+      "duration_s": 1.59,
+      "hz": 46.0,
+      "date": "2026-04-11 15:23:44"
+    },
+    {
+      "file": "flick_004.csv",
+      "gesture": "flick",
+      "rep": 4,
+      "samples": 51,
+      "duration_s": 1.14,
+      "hz": 44.9,
+      "date": "2026-04-11 15:23:47"
+    },
+    {
+      "file": "flick_005.csv",
+      "gesture": "flick",
+      "rep": 5,
+      "samples": 51,
+      "duration_s": 1.14,
+      "hz": 44.8,
+      "date": "2026-04-11 15:23:50"
+    },
+    {
+      "file": "wing_003.csv",
+      "gesture": "wing",
+      "rep": 3,
+      "samples": 72,
+      "duration_s": 1.65,
+      "hz": 43.6,
+      "date": "2026-04-11 15:23:56"
+    },
+    {
+      "file": "wing_004.csv",
+      "gesture": "wing",
+      "rep": 4,
+      "samples": 75,
+      "duration_s": 1.65,
+      "hz": 45.4,
+      "date": "2026-04-11 15:23:58"
+    },
+    {
+      "file": "wing_005.csv",
+      "gesture": "wing",
+      "rep": 5,
+      "samples": 94,
+      "duration_s": 2.13,
+      "hz": 44.1,
+      "date": "2026-04-11 15:24:02"
+    },
+    {
+      "file": "wing_006.csv",
+      "gesture": "wing",
+      "rep": 6,
+      "samples": 74,
+      "duration_s": 1.65,
+      "hz": 44.8,
+      "date": "2026-04-11 15:24:04"
+    },
+    {
+      "file": "beat_006.csv",
+      "gesture": "beat",
+      "rep": 6,
+      "samples": 71,
+      "duration_s": 1.56,
+      "hz": 45.5,
+      "date": "2026-04-11 15:24:22"
+    },
+    {
+      "file": "beat_007.csv",
+      "gesture": "beat",
+      "rep": 7,
+      "samples": 43,
+      "duration_s": 0.9,
+      "hz": 48.0,
+      "date": "2026-04-11 15:24:25"
+    },
+    {
+      "file": "beat_008.csv",
+      "gesture": "beat",
+      "rep": 8,
+      "samples": 48,
+      "duration_s": 0.96,
+      "hz": 50.0,
+      "date": "2026-04-11 15:24:27"
+    },
+    {
+      "file": "beat_009.csv",
+      "gesture": "beat",
+      "rep": 9,
+      "samples": 44,
+      "duration_s": 0.9,
+      "hz": 48.9,
+      "date": "2026-04-11 15:24:30"
+    },
+    {
+      "file": "beat_010.csv",
+      "gesture": "beat",
+      "rep": 10,
+      "samples": 45,
+      "duration_s": 0.81,
+      "hz": 55.3,
+      "date": "2026-04-11 15:24:33"
+    },
+    {
+      "file": "beat_011.csv",
+      "gesture": "beat",
+      "rep": 11,
+      "samples": 49,
+      "duration_s": 1.08,
+      "hz": 45.5,
+      "date": "2026-04-11 15:24:37"
+    },
+    {
+      "file": "beat_012.csv",
+      "gesture": "beat",
+      "rep": 12,
+      "samples": 59,
+      "duration_s": 1.29,
+      "hz": 45.7,
+      "date": "2026-04-11 15:24:40"
+    },
+    {
+      "file": "beat_013.csv",
+      "gesture": "beat",
+      "rep": 13,
+      "samples": 56,
+      "duration_s": 1.23,
+      "hz": 45.4,
+      "date": "2026-04-11 15:24:43"
+    },
+    {
+      "file": "beat_014.csv",
+      "gesture": "beat",
+      "rep": 14,
+      "samples": 30,
+      "duration_s": 0.6,
+      "hz": 50.0,
+      "date": "2026-04-11 15:24:45"
+    },
+    {
+      "file": "beat_015.csv",
+      "gesture": "beat",
+      "rep": 15,
+      "samples": 48,
+      "duration_s": 1.05,
+      "hz": 45.8,
+      "date": "2026-04-11 15:24:47"
+    },
+    {
+      "file": "beat_016.csv",
+      "gesture": "beat",
+      "rep": 16,
+      "samples": 48,
+      "duration_s": 1.02,
+      "hz": 47.0,
+      "date": "2026-04-11 15:24:50"
+    },
+    {
+      "file": "beat_017.csv",
+      "gesture": "beat",
+      "rep": 17,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.6,
+      "date": "2026-04-11 15:24:54"
+    },
+    {
+      "file": "beat_018.csv",
+      "gesture": "beat",
+      "rep": 18,
+      "samples": 45,
+      "duration_s": 0.99,
+      "hz": 45.5,
+      "date": "2026-04-11 15:24:58"
+    },
+    {
+      "file": "beat_019.csv",
+      "gesture": "beat",
+      "rep": 19,
+      "samples": 46,
+      "duration_s": 0.99,
+      "hz": 46.4,
+      "date": "2026-04-11 15:25:02"
+    },
+    {
+      "file": "beat_020.csv",
+      "gesture": "beat",
+      "rep": 20,
+      "samples": 67,
+      "duration_s": 1.44,
+      "hz": 46.5,
+      "date": "2026-04-11 15:25:06"
+    },
+    {
+      "file": "stab_004.csv",
+      "gesture": "stab",
+      "rep": 4,
+      "samples": 40,
+      "duration_s": 1.02,
+      "hz": 39.2,
+      "date": "2026-04-11 15:25:11"
+    },
+    {
+      "file": "stab_005.csv",
+      "gesture": "stab",
+      "rep": 5,
+      "samples": 49,
+      "duration_s": 1.08,
+      "hz": 45.4,
+      "date": "2026-04-11 15:25:14"
+    },
+    {
+      "file": "stab_006.csv",
+      "gesture": "stab",
+      "rep": 6,
+      "samples": 47,
+      "duration_s": 1.05,
+      "hz": 44.7,
+      "date": "2026-04-11 15:25:17"
+    },
+    {
+      "file": "stab_007.csv",
+      "gesture": "stab",
+      "rep": 7,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.7,
+      "date": "2026-04-11 15:25:20"
+    },
+    {
+      "file": "stab_008.csv",
+      "gesture": "stab",
+      "rep": 8,
+      "samples": 45,
+      "duration_s": 0.96,
+      "hz": 46.9,
+      "date": "2026-04-11 15:25:23"
+    },
+    {
+      "file": "stab_009.csv",
+      "gesture": "stab",
+      "rep": 9,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.6,
+      "date": "2026-04-11 15:25:26"
+    },
+    {
+      "file": "stab_010.csv",
+      "gesture": "stab",
+      "rep": 10,
+      "samples": 41,
+      "duration_s": 0.9,
+      "hz": 45.3,
+      "date": "2026-04-11 15:25:29"
+    },
+    {
+      "file": "stab_011.csv",
+      "gesture": "stab",
+      "rep": 11,
+      "samples": 49,
+      "duration_s": 1.08,
+      "hz": 45.4,
+      "date": "2026-04-11 15:25:32"
+    },
+    {
+      "file": "stab_012.csv",
+      "gesture": "stab",
+      "rep": 12,
+      "samples": 35,
+      "duration_s": 0.78,
+      "hz": 44.9,
+      "date": "2026-04-11 15:25:34"
+    },
+    {
+      "file": "stab_013.csv",
+      "gesture": "stab",
+      "rep": 13,
+      "samples": 37,
+      "duration_s": 0.81,
+      "hz": 45.7,
+      "date": "2026-04-11 15:25:37"
+    },
+    {
+      "file": "stab_014.csv",
+      "gesture": "stab",
+      "rep": 14,
+      "samples": 47,
+      "duration_s": 1.05,
+      "hz": 44.8,
+      "date": "2026-04-11 15:25:41"
+    },
+    {
+      "file": "stab_015.csv",
+      "gesture": "stab",
+      "rep": 15,
+      "samples": 51,
+      "duration_s": 1.14,
+      "hz": 44.8,
+      "date": "2026-04-11 15:25:43"
+    },
+    {
+      "file": "stab_016.csv",
+      "gesture": "stab",
+      "rep": 16,
+      "samples": 43,
+      "duration_s": 0.96,
+      "hz": 44.7,
+      "date": "2026-04-11 15:25:46"
+    },
+    {
+      "file": "stab_017.csv",
+      "gesture": "stab",
+      "rep": 17,
+      "samples": 44,
+      "duration_s": 0.96,
+      "hz": 45.8,
+      "date": "2026-04-11 15:25:48"
+    },
+    {
+      "file": "stab_018.csv",
+      "gesture": "stab",
+      "rep": 18,
+      "samples": 32,
+      "duration_s": 0.72,
+      "hz": 44.4,
+      "date": "2026-04-11 15:25:50"
+    },
+    {
+      "file": "stab_019.csv",
+      "gesture": "stab",
+      "rep": 19,
+      "samples": 30,
+      "duration_s": 0.66,
+      "hz": 45.3,
+      "date": "2026-04-11 15:25:52"
+    },
+    {
+      "file": "stab_020.csv",
+      "gesture": "stab",
+      "rep": 20,
+      "samples": 37,
+      "duration_s": 0.81,
+      "hz": 45.6,
+      "date": "2026-04-11 15:25:55"
+    },
+    {
+      "file": "spin_008.csv",
+      "gesture": "spin",
+      "rep": 8,
+      "samples": 65,
+      "duration_s": 1.47,
+      "hz": 44.2,
+      "date": "2026-04-11 15:25:59"
+    },
+    {
+      "file": "spin_009.csv",
+      "gesture": "spin",
+      "rep": 9,
+      "samples": 54,
+      "duration_s": 1.2,
+      "hz": 45.0,
+      "date": "2026-04-11 15:26:02"
+    },
+    {
+      "file": "spin_010.csv",
+      "gesture": "spin",
+      "rep": 10,
+      "samples": 70,
+      "duration_s": 1.59,
+      "hz": 44.1,
+      "date": "2026-04-11 15:26:04"
+    },
+    {
+      "file": "spin_011.csv",
+      "gesture": "spin",
+      "rep": 11,
+      "samples": 52,
+      "duration_s": 1.17,
+      "hz": 44.4,
+      "date": "2026-04-11 15:26:06"
+    },
+    {
+      "file": "spin_012.csv",
+      "gesture": "spin",
+      "rep": 12,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.6,
+      "date": "2026-04-11 15:26:08"
+    },
+    {
+      "file": "spin_013.csv",
+      "gesture": "spin",
+      "rep": 13,
+      "samples": 56,
+      "duration_s": 1.26,
+      "hz": 44.5,
+      "date": "2026-04-11 15:26:11"
+    },
+    {
+      "file": "spin_014.csv",
+      "gesture": "spin",
+      "rep": 14,
+      "samples": 59,
+      "duration_s": 1.29,
+      "hz": 45.8,
+      "date": "2026-04-11 15:26:13"
+    },
+    {
+      "file": "spin_015.csv",
+      "gesture": "spin",
+      "rep": 15,
+      "samples": 55,
+      "duration_s": 1.23,
+      "hz": 44.8,
+      "date": "2026-04-11 15:26:15"
+    },
+    {
+      "file": "spin_016.csv",
+      "gesture": "spin",
+      "rep": 16,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.6,
+      "date": "2026-04-11 15:26:17"
+    },
+    {
+      "file": "spin_017.csv",
+      "gesture": "spin",
+      "rep": 17,
+      "samples": 61,
+      "duration_s": 1.32,
+      "hz": 46.3,
+      "date": "2026-04-11 15:26:19"
+    },
+    {
+      "file": "spin_018.csv",
+      "gesture": "spin",
+      "rep": 18,
+      "samples": 66,
+      "duration_s": 1.47,
+      "hz": 44.9,
+      "date": "2026-04-11 15:26:21"
+    },
+    {
+      "file": "spin_019.csv",
+      "gesture": "spin",
+      "rep": 19,
+      "samples": 56,
+      "duration_s": 1.26,
+      "hz": 44.5,
+      "date": "2026-04-11 15:26:24"
+    },
+    {
+      "file": "spin_020.csv",
+      "gesture": "spin",
+      "rep": 20,
+      "samples": 50,
+      "duration_s": 1.02,
+      "hz": 49.0,
+      "date": "2026-04-11 15:26:26"
+    },
+    {
+      "file": "slash_007.csv",
+      "gesture": "slash",
+      "rep": 7,
+      "samples": 42,
+      "duration_s": 0.93,
+      "hz": 45.1,
+      "date": "2026-04-11 15:26:31"
+    },
+    {
+      "file": "slash_008.csv",
+      "gesture": "slash",
+      "rep": 8,
+      "samples": 42,
+      "duration_s": 0.93,
+      "hz": 45.2,
+      "date": "2026-04-11 15:26:34"
+    },
+    {
+      "file": "slash_009.csv",
+      "gesture": "slash",
+      "rep": 9,
+      "samples": 45,
+      "duration_s": 0.99,
+      "hz": 45.4,
+      "date": "2026-04-11 15:26:36"
+    },
+    {
+      "file": "slash_010.csv",
+      "gesture": "slash",
+      "rep": 10,
+      "samples": 42,
+      "duration_s": 0.93,
+      "hz": 45.3,
+      "date": "2026-04-11 15:26:41"
+    },
+    {
+      "file": "slash_011.csv",
+      "gesture": "slash",
+      "rep": 11,
+      "samples": 50,
+      "duration_s": 1.11,
+      "hz": 45.0,
+      "date": "2026-04-11 15:26:44"
+    },
+    {
+      "file": "slash_012.csv",
+      "gesture": "slash",
+      "rep": 12,
+      "samples": 53,
+      "duration_s": 1.17,
+      "hz": 45.3,
+      "date": "2026-04-11 15:26:46"
+    },
+    {
+      "file": "slash_013.csv",
+      "gesture": "slash",
+      "rep": 13,
+      "samples": 39,
+      "duration_s": 0.84,
+      "hz": 46.3,
+      "date": "2026-04-11 15:26:48"
+    },
+    {
+      "file": "slash_014.csv",
+      "gesture": "slash",
+      "rep": 14,
+      "samples": 44,
+      "duration_s": 0.96,
+      "hz": 45.8,
+      "date": "2026-04-11 15:26:51"
+    },
+    {
+      "file": "slash_015.csv",
+      "gesture": "slash",
+      "rep": 15,
+      "samples": 41,
+      "duration_s": 0.9,
+      "hz": 45.5,
+      "date": "2026-04-11 15:26:53"
+    },
+    {
+      "file": "slash_016.csv",
+      "gesture": "slash",
+      "rep": 16,
+      "samples": 46,
+      "duration_s": 1.02,
+      "hz": 45.2,
+      "date": "2026-04-11 15:26:55"
+    },
+    {
+      "file": "slash_017.csv",
+      "gesture": "slash",
+      "rep": 17,
+      "samples": 44,
+      "duration_s": 0.99,
+      "hz": 44.5,
+      "date": "2026-04-11 15:26:57"
+    },
+    {
+      "file": "slash_018.csv",
+      "gesture": "slash",
+      "rep": 18,
+      "samples": 43,
+      "duration_s": 0.96,
+      "hz": 44.9,
+      "date": "2026-04-11 15:26:59"
+    },
+    {
+      "file": "slash_019.csv",
+      "gesture": "slash",
+      "rep": 19,
+      "samples": 57,
+      "duration_s": 1.23,
+      "hz": 46.3,
+      "date": "2026-04-11 15:27:09"
+    },
+    {
+      "file": "slash_020.csv",
+      "gesture": "slash",
+      "rep": 20,
+      "samples": 43,
+      "duration_s": 1.02,
+      "hz": 42.1,
+      "date": "2026-04-11 15:27:12"
+    },
+    {
+      "file": "shake_006.csv",
+      "gesture": "shake",
+      "rep": 6,
+      "samples": 78,
+      "duration_s": 1.74,
+      "hz": 44.8,
+      "date": "2026-04-11 15:27:18"
+    },
+    {
+      "file": "shake_007.csv",
+      "gesture": "shake",
+      "rep": 7,
+      "samples": 66,
+      "duration_s": 1.5,
+      "hz": 43.9,
+      "date": "2026-04-11 15:27:21"
+    },
+    {
+      "file": "shake_008.csv",
+      "gesture": "shake",
+      "rep": 8,
+      "samples": 76,
+      "duration_s": 1.68,
+      "hz": 45.2,
+      "date": "2026-04-11 15:27:25"
+    },
+    {
+      "file": "shake_009.csv",
+      "gesture": "shake",
+      "rep": 9,
+      "samples": 79,
+      "duration_s": 1.8,
+      "hz": 44.0,
+      "date": "2026-04-11 15:27:30"
+    },
+    {
+      "file": "shake_010.csv",
+      "gesture": "shake",
+      "rep": 10,
+      "samples": 87,
+      "duration_s": 1.99,
+      "hz": 43.8,
+      "date": "2026-04-11 15:27:34"
+    },
+    {
+      "file": "shake_011.csv",
+      "gesture": "shake",
+      "rep": 11,
+      "samples": 55,
+      "duration_s": 1.23,
+      "hz": 44.6,
+      "date": "2026-04-11 15:27:38"
+    },
+    {
+      "file": "shake_012.csv",
+      "gesture": "shake",
+      "rep": 12,
+      "samples": 52,
+      "duration_s": 1.16,
+      "hz": 44.6,
+      "date": "2026-04-11 15:27:40"
+    },
+    {
+      "file": "shake_013.csv",
+      "gesture": "shake",
+      "rep": 13,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.6,
+      "date": "2026-04-11 15:27:42"
+    },
+    {
+      "file": "shake_014.csv",
+      "gesture": "shake",
+      "rep": 14,
+      "samples": 47,
+      "duration_s": 1.02,
+      "hz": 46.1,
+      "date": "2026-04-11 15:27:44"
+    },
+    {
+      "file": "shake_015.csv",
+      "gesture": "shake",
+      "rep": 15,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.6,
+      "date": "2026-04-11 15:27:46"
+    },
+    {
+      "file": "shake_016.csv",
+      "gesture": "shake",
+      "rep": 16,
+      "samples": 56,
+      "duration_s": 1.2,
+      "hz": 46.6,
+      "date": "2026-04-11 15:27:49"
+    },
+    {
+      "file": "shake_017.csv",
+      "gesture": "shake",
+      "rep": 17,
+      "samples": 31,
+      "duration_s": 0.69,
+      "hz": 45.0,
+      "date": "2026-04-11 15:27:50"
+    },
+    {
+      "file": "shake_018.csv",
+      "gesture": "shake",
+      "rep": 18,
+      "samples": 60,
+      "duration_s": 1.26,
+      "hz": 47.6,
+      "date": "2026-04-11 15:27:53"
+    },
+    {
+      "file": "shake_019.csv",
+      "gesture": "shake",
+      "rep": 19,
+      "samples": 42,
+      "duration_s": 0.9,
+      "hz": 46.6,
+      "date": "2026-04-11 15:27:55"
+    },
+    {
+      "file": "shake_020.csv",
+      "gesture": "shake",
+      "rep": 20,
+      "samples": 58,
+      "duration_s": 1.35,
+      "hz": 42.9,
+      "date": "2026-04-11 15:41:25"
+    },
+    {
+      "file": "flick_006.csv",
+      "gesture": "flick",
+      "rep": 6,
+      "samples": 46,
+      "duration_s": 1.05,
+      "hz": 43.9,
+      "date": "2026-04-11 15:41:37"
+    },
+    {
+      "file": "flick_007.csv",
+      "gesture": "flick",
+      "rep": 7,
+      "samples": 39,
+      "duration_s": 0.87,
+      "hz": 44.9,
+      "date": "2026-04-11 15:41:39"
+    },
+    {
+      "file": "flick_008.csv",
+      "gesture": "flick",
+      "rep": 8,
+      "samples": 36,
+      "duration_s": 0.81,
+      "hz": 44.4,
+      "date": "2026-04-11 15:41:42"
+    },
+    {
+      "file": "flick_009.csv",
+      "gesture": "flick",
+      "rep": 9,
+      "samples": 38,
+      "duration_s": 0.84,
+      "hz": 45.3,
+      "date": "2026-04-11 15:41:44"
+    },
+    {
+      "file": "flick_010.csv",
+      "gesture": "flick",
+      "rep": 10,
+      "samples": 38,
+      "duration_s": 0.84,
+      "hz": 45.2,
+      "date": "2026-04-11 15:41:46"
+    },
+    {
+      "file": "flick_011.csv",
+      "gesture": "flick",
+      "rep": 11,
+      "samples": 44,
+      "duration_s": 0.96,
+      "hz": 45.7,
+      "date": "2026-04-11 15:41:48"
+    },
+    {
+      "file": "flick_012.csv",
+      "gesture": "flick",
+      "rep": 12,
+      "samples": 44,
+      "duration_s": 0.99,
+      "hz": 44.3,
+      "date": "2026-04-11 15:41:51"
+    },
+    {
+      "file": "flick_013.csv",
+      "gesture": "flick",
+      "rep": 13,
+      "samples": 47,
+      "duration_s": 1.05,
+      "hz": 44.6,
+      "date": "2026-04-11 15:41:53"
+    },
+    {
+      "file": "flick_014.csv",
+      "gesture": "flick",
+      "rep": 14,
+      "samples": 42,
+      "duration_s": 0.93,
+      "hz": 45.3,
+      "date": "2026-04-11 15:41:56"
+    },
+    {
+      "file": "flick_015.csv",
+      "gesture": "flick",
+      "rep": 15,
+      "samples": 40,
+      "duration_s": 0.9,
+      "hz": 44.4,
+      "date": "2026-04-11 15:41:58"
+    },
+    {
+      "file": "flick_016.csv",
+      "gesture": "flick",
+      "rep": 16,
+      "samples": 35,
+      "duration_s": 0.78,
+      "hz": 44.6,
+      "date": "2026-04-11 15:42:00"
+    },
+    {
+      "file": "flick_017.csv",
+      "gesture": "flick",
+      "rep": 17,
+      "samples": 41,
+      "duration_s": 0.81,
+      "hz": 50.5,
+      "date": "2026-04-11 15:42:03"
+    },
+    {
+      "file": "flick_018.csv",
+      "gesture": "flick",
+      "rep": 18,
+      "samples": 40,
+      "duration_s": 0.9,
+      "hz": 44.6,
+      "date": "2026-04-11 15:42:05"
+    },
+    {
+      "file": "flick_019.csv",
+      "gesture": "flick",
+      "rep": 19,
+      "samples": 34,
+      "duration_s": 0.75,
+      "hz": 45.2,
+      "date": "2026-04-11 15:42:07"
+    },
+    {
+      "file": "flick_020.csv",
+      "gesture": "flick",
+      "rep": 20,
+      "samples": 33,
+      "duration_s": 0.72,
+      "hz": 45.7,
+      "date": "2026-04-11 15:42:09"
+    },
+    {
+      "file": "wing_007.csv",
+      "gesture": "wing",
+      "rep": 7,
+      "samples": 85,
+      "duration_s": 1.92,
+      "hz": 44.3,
+      "date": "2026-04-11 15:42:14"
+    },
+    {
+      "file": "wing_008.csv",
+      "gesture": "wing",
+      "rep": 8,
+      "samples": 56,
+      "duration_s": 1.26,
+      "hz": 44.3,
+      "date": "2026-04-11 15:42:17"
+    },
+    {
+      "file": "wing_009.csv",
+      "gesture": "wing",
+      "rep": 9,
+      "samples": 56,
+      "duration_s": 1.26,
+      "hz": 44.5,
+      "date": "2026-04-11 15:42:19"
+    },
+    {
+      "file": "wing_010.csv",
+      "gesture": "wing",
+      "rep": 10,
+      "samples": 47,
+      "duration_s": 1.05,
+      "hz": 44.7,
+      "date": "2026-04-11 15:42:21"
+    },
+    {
+      "file": "wing_011.csv",
+      "gesture": "wing",
+      "rep": 11,
+      "samples": 48,
+      "duration_s": 1.05,
+      "hz": 45.7,
+      "date": "2026-04-11 15:42:24"
+    },
+    {
+      "file": "wing_012.csv",
+      "gesture": "wing",
+      "rep": 12,
+      "samples": 51,
+      "duration_s": 1.14,
+      "hz": 44.6,
+      "date": "2026-04-11 15:42:27"
+    },
+    {
+      "file": "wing_013.csv",
+      "gesture": "wing",
+      "rep": 13,
+      "samples": 48,
+      "duration_s": 1.05,
+      "hz": 45.8,
+      "date": "2026-04-11 15:42:29"
+    },
+    {
+      "file": "wing_014.csv",
+      "gesture": "wing",
+      "rep": 14,
+      "samples": 61,
+      "duration_s": 1.35,
+      "hz": 45.1,
+      "date": "2026-04-11 15:42:31"
+    },
+    {
+      "file": "wing_015.csv",
+      "gesture": "wing",
+      "rep": 15,
+      "samples": 50,
+      "duration_s": 1.11,
+      "hz": 44.9,
+      "date": "2026-04-11 15:42:34"
+    },
+    {
+      "file": "wing_016.csv",
+      "gesture": "wing",
+      "rep": 16,
+      "samples": 52,
+      "duration_s": 1.14,
+      "hz": 45.7,
+      "date": "2026-04-11 15:42:36"
+    },
+    {
+      "file": "wing_017.csv",
+      "gesture": "wing",
+      "rep": 17,
+      "samples": 45,
+      "duration_s": 1.02,
+      "hz": 43.9,
+      "date": "2026-04-11 15:42:38"
+    },
+    {
+      "file": "wing_018.csv",
+      "gesture": "wing",
+      "rep": 18,
+      "samples": 62,
+      "duration_s": 1.38,
+      "hz": 44.9,
+      "date": "2026-04-11 15:42:41"
+    },
+    {
+      "file": "wing_019.csv",
+      "gesture": "wing",
+      "rep": 19,
+      "samples": 62,
+      "duration_s": 1.26,
+      "hz": 49.1,
+      "date": "2026-04-11 15:42:43"
+    },
+    {
+      "file": "wing_020.csv",
+      "gesture": "wing",
+      "rep": 20,
+      "samples": 61,
+      "duration_s": 1.38,
+      "hz": 44.1,
+      "date": "2026-04-11 15:42:46"
+    }
+  ]
+}

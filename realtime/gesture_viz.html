@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MagicBaton Gesture Visualizer</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #08080c;
+  --mono: 'JetBrains Mono', monospace;
+}
+html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); }
+#canvas { position:fixed; top:0; left:0; width:100%; height:100%; }
+
+/* Overlay */
+#overlay {
+  position:fixed; bottom:0; left:0; right:0;
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding:24px 32px;
+  pointer-events:none;
+  z-index:10;
+}
+#gesture-box {
+  display:flex; flex-direction:column; gap:4px;
+}
+#gesture-label {
+  font-family:var(--mono); font-size:64px; font-weight:700;
+  letter-spacing:4px; text-transform:uppercase;
+  color:#333;
+  transition: color 0.15s, text-shadow 0.15s;
+  line-height:1;
+}
+#gesture-label.active {
+  animation: gestureFlash 0.3s ease-out;
+}
+@keyframes gestureFlash {
+  0% { transform: scale(1.15); filter: brightness(1.8); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+#gesture-conf {
+  font-family:var(--mono); font-size:13px; font-weight:300;
+  color:#555; letter-spacing:1px;
+}
+#info-box {
+  display:flex; flex-direction:column; align-items:flex-end; gap:6px;
+}
+#status-line {
+  font-family:var(--mono); font-size:11px; letter-spacing:0.8px;
+  display:flex; align-items:center; gap:8px;
+}
+#status-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:#ff5252; box-shadow:0 0 8px #ff5252;
+  transition:all 0.4s;
+}
+#status-dot.on { background:#00e676; box-shadow:0 0 10px #00e676; }
+#status-text { color:#555; }
+#energy-bar-wrap {
+  width:120px; height:4px; background:rgba(255,255,255,0.05);
+  border-radius:2px; overflow:hidden;
+}
+#energy-bar {
+  height:100%; width:0%; background:#448aff; border-radius:2px;
+  transition: width 0.1s;
+}
+
+/* History */
+#history {
+  position:fixed; top:20px; right:24px;
+  display:flex; flex-direction:column; gap:3px;
+  pointer-events:none; z-index:10;
+}
+.hist-item {
+  font-family:var(--mono); font-size:11px; letter-spacing:0.5px;
+  opacity:0.6;
+  transition: opacity 0.3s;
+}
+.hist-item:first-child { opacity:1; }
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<div id="overlay">
+  <div id="gesture-box">
+    <div id="gesture-label">IDLE</div>
+    <div id="gesture-conf"></div>
+  </div>
+  <div id="info-box">
+    <div id="status-line">
+      <div id="status-dot"></div>
+      <span id="status-text">connecting...</span>
+    </div>
+    <div id="energy-bar-wrap"><div id="energy-bar"></div></div>
+  </div>
+</div>
+
+<div id="history"></div>
+
+<script>
+// ── Config ──
+const GESTURE_COLORS = {
+  beat:  { r:255, g:145, b:0   },  // orange
+  stab:  { r:24,  g:255, b:255 },  // cyan
+  spin:  { r:179, g:136, b:255 },  // purple
+  slash: { r:255, g:82,  b:82  },  // red
+  shake: { r:0,   g:230, b:118 },  // green
+  flick: { r:255, g:128, b:171 },  // pink
+  wing:  { r:68,  g:138, b:255 },  // blue
+  idle:  { r:60,  g:60,  b:80  },  // grey
+};
+
+// ── Canvas setup ──
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H, cx, cy;
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx = W / 2;
+  cy = H / 2;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ── State ──
+let currentGesture = 'idle';
+let gestureIntensity = 0;
+let bgEnergy = 0;
+const particles = [];
+const rings = [];
+const trails = [];
+const lines = [];
+const history = [];
+
+// ── WebSocket ──
+let ws = null;
+let connected = false;
+
+function connectWS() {
+  ws = new WebSocket('ws://localhost:8765');
+  ws.onopen = () => {
+    connected = true;
+    document.getElementById('status-dot').classList.add('on');
+    document.getElementById('status-text').textContent = 'connected';
+  };
+  ws.onclose = () => {
+    connected = false;
+    document.getElementById('status-dot').classList.remove('on');
+    document.getElementById('status-text').textContent = 'disconnected';
+    setTimeout(connectWS, 2000);
+  };
+  ws.onerror = () => ws.close();
+  ws.onmessage = (e) => {
+    try { handleData(JSON.parse(e.data)); } catch(err) {}
+  };
+}
+connectWS();
+
+function handleData(d) {
+  const gesture = d.gesture || 'idle';
+  const conf = d.gesture_confidence || 0;
+  const jerk = d.gesture_jerk || 0;
+
+  // Jerk bar
+  const jPct = Math.min(100, jerk / 0.3 * 100);
+  document.getElementById('energy-bar').style.width = jPct + '%';
+
+  bgEnergy = bgEnergy * 0.92 + jerk * 0.3;
+
+  if (gesture !== 'idle' && gesture !== currentGesture) {
+    // New gesture detected
+    currentGesture = gesture;
+    gestureIntensity = conf;
+    spawnGesture(gesture, conf);
+    updateLabel(gesture, conf);
+    addHistory(gesture, conf);
+  } else if (gesture === 'idle') {
+    gestureIntensity *= 0.95;
+    if (gestureIntensity < 0.05) {
+      currentGesture = 'idle';
+      updateLabel('idle', 0);
+    }
+  }
+}
+
+function updateLabel(gesture, conf) {
+  const el = document.getElementById('gesture-label');
+  const col = GESTURE_COLORS[gesture] || GESTURE_COLORS.idle;
+  el.textContent = gesture.toUpperCase();
+  if (gesture !== 'idle') {
+    el.style.color = `rgb(${col.r},${col.g},${col.b})`;
+    el.style.textShadow = `0 0 40px rgba(${col.r},${col.g},${col.b},0.6)`;
+    el.classList.remove('active');
+    void el.offsetWidth;
+    el.classList.add('active');
+    document.getElementById('gesture-conf').textContent = (conf*100).toFixed(0) + '% confidence';
+    document.getElementById('gesture-conf').style.color = `rgba(${col.r},${col.g},${col.b},0.5)`;
+  } else {
+    el.style.color = '#333';
+    el.style.textShadow = 'none';
+    document.getElementById('gesture-conf').textContent = '';
+  }
+}
+
+function addHistory(gesture, conf) {
+  history.unshift({ gesture, conf, time: Date.now() });
+  if (history.length > 8) history.pop();
+  const el = document.getElementById('history');
+  el.innerHTML = history.map((h, i) => {
+    const c = GESTURE_COLORS[h.gesture];
+    const ago = ((Date.now() - h.time) / 1000).toFixed(1);
+    return `<div class="hist-item" style="color:rgb(${c.r},${c.g},${c.b})">${h.gesture.toUpperCase()} ${(h.conf*100).toFixed(0)}%  <span style="color:#444">${ago}s</span></div>`;
+  }).join('');
+}
+
+// ── Gesture Effect Spawners ──
+
+function spawnGesture(name, intensity) {
+  const fn = {
+    beat: spawnBeat, stab: spawnStab, spin: spawnSpin,
+    slash: spawnSlash, shake: spawnShake, flick: spawnFlick, wing: spawnWing,
+  }[name];
+  if (fn) fn(intensity);
+}
+
+function spawnBeat(intensity) {
+  const col = GESTURE_COLORS.beat;
+  // Expanding rings
+  for (let i = 0; i < 3; i++) {
+    rings.push({ x:cx, y:cy, r:10+i*20, maxR:Math.min(W,H)*0.5, speed:4+i*1.5, alpha:0.8-i*0.15, col, width:3-i*0.5, life:1 });
+  }
+  // Particle burst
+  for (let i = 0; i < 40; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const spd = 2 + Math.random() * 6 * intensity;
+    particles.push({ x:cx, y:cy, vx:Math.cos(a)*spd, vy:Math.sin(a)*spd, life:1, decay:0.015+Math.random()*0.01, size:2+Math.random()*3, col });
+  }
+}
+
+function spawnStab(intensity) {
+  const col = GESTURE_COLORS.stab;
+  // Forward beam
+  const angle = -Math.PI/2 + (Math.random()-0.5)*0.3;
+  lines.push({ x:cx, y:cy, angle, length:0, maxLength:Math.max(W,H)*0.6, speed:15, alpha:1, col, width:4, life:1 });
+  // Trailing particles
+  for (let i = 0; i < 25; i++) {
+    const t = Math.random();
+    const dist = t * W * 0.4;
+    particles.push({
+      x: cx + Math.cos(angle)*dist, y: cy + Math.sin(angle)*dist,
+      vx: (Math.random()-0.5)*1.5, vy: (Math.random()-0.5)*1.5,
+      life:1, decay:0.02+Math.random()*0.015, size:1.5+Math.random()*2, col
+    });
+  }
+}
+
+function spawnSpin(intensity) {
+  const col = GESTURE_COLORS.spin;
+  const n = 50;
+  for (let i = 0; i < n; i++) {
+    const baseAngle = (i / n) * Math.PI * 4; // 2 full spirals
+    const r0 = 20 + (i / n) * Math.min(W,H) * 0.3;
+    particles.push({
+      x: cx + Math.cos(baseAngle)*r0, y: cy + Math.sin(baseAngle)*r0,
+      vx: Math.cos(baseAngle+Math.PI/2)*2, vy: Math.sin(baseAngle+Math.PI/2)*2,
+      life:1, decay:0.008+Math.random()*0.005, size:2+Math.random()*2.5, col,
+      orbit: true, orbitCx:cx, orbitCy:cy, orbitR:r0, orbitAngle:baseAngle, orbitSpeed:0.03+Math.random()*0.02
+    });
+  }
+}
+
+function spawnSlash(intensity) {
+  const col = GESTURE_COLORS.slash;
+  const angle = -Math.PI/4 + (Math.random()-0.5)*0.5;
+  // Main slash line
+  lines.push({ x:cx-Math.cos(angle)*W*0.4, y:cy-Math.sin(angle)*H*0.4, angle, length:0, maxLength:Math.max(W,H)*0.9, speed:25, alpha:1, col, width:3, life:1 });
+  // Sparks perpendicular
+  for (let i = 0; i < 30; i++) {
+    const t = Math.random();
+    const px = cx + Math.cos(angle)*(t-0.5)*W*0.6;
+    const py = cy + Math.sin(angle)*(t-0.5)*H*0.6;
+    const perp = angle + Math.PI/2 + (Math.random()-0.5)*0.8;
+    const spd = 1 + Math.random()*4;
+    particles.push({ x:px, y:py, vx:Math.cos(perp)*spd, vy:Math.sin(perp)*spd, life:1, decay:0.02+Math.random()*0.015, size:1.5+Math.random()*2, col });
+  }
+}
+
+function spawnShake(intensity) {
+  const col = GESTURE_COLORS.shake;
+  // Horizontal oscillating lines
+  for (let i = 0; i < 12; i++) {
+    const yy = cy + (i - 5.5) * 25;
+    trails.push({
+      type:'wave', y:yy, phase:Math.random()*Math.PI*2, freq:0.03+Math.random()*0.02,
+      amp:20+Math.random()*30, alpha:0.7, col, life:1, decay:0.012
+    });
+  }
+  // Scattered particles
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      x:cx+(Math.random()-0.5)*W*0.5, y:cy+(Math.random()-0.5)*H*0.3,
+      vx:(Math.random()-0.5)*6, vy:(Math.random()-0.5)*2,
+      life:1, decay:0.02, size:1.5+Math.random()*2, col
+    });
+  }
+}
+
+function spawnFlick(intensity) {
+  const col = GESTURE_COLORS.flick;
+  // Central flash
+  rings.push({ x:cx, y:cy, r:0, maxR:Math.min(W,H)*0.3, speed:12, alpha:0.9, col, width:2, life:1, flash:true });
+  // Tiny fast particles
+  for (let i = 0; i < 35; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const spd = 4 + Math.random() * 8;
+    particles.push({ x:cx, y:cy, vx:Math.cos(a)*spd, vy:Math.sin(a)*spd, life:1, decay:0.03+Math.random()*0.02, size:1+Math.random()*2, col });
+  }
+}
+
+function spawnWing(intensity) {
+  const col = GESTURE_COLORS.wing;
+  // Two symmetric arcs spreading out
+  for (let side = -1; side <= 1; side += 2) {
+    for (let i = 0; i < 30; i++) {
+      const t = i / 29;
+      const angle = side * (t * Math.PI * 0.6 + 0.2);
+      const r = 30 + t * Math.min(W,H) * 0.35;
+      const delay = t * 0.3;
+      particles.push({
+        x: cx, y: cy + 50,
+        vx: Math.cos(angle - Math.PI/2) * (2 + t*4) * side,
+        vy: Math.sin(angle - Math.PI/2) * (2 + t*4) - 1,
+        life: 1, decay: 0.008 + Math.random()*0.005,
+        size: 2 + (1-t)*3, col,
+        delay: delay
+      });
+    }
+  }
+}
+
+
+// ── Render loop ──
+
+function render() {
+  // Fade
+  ctx.fillStyle = 'rgba(8,8,12,0.08)';
+  ctx.fillRect(0, 0, W, H);
+
+  // Ambient center glow
+  const glow = Math.min(0.15, bgEnergy * 20);
+  if (glow > 0.005) {
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W,H)*0.4);
+    const gc = GESTURE_COLORS[currentGesture] || GESTURE_COLORS.idle;
+    grad.addColorStop(0, `rgba(${gc.r},${gc.g},${gc.b},${glow})`);
+    grad.addColorStop(1, 'rgba(8,8,12,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // Rings
+  for (let i = rings.length - 1; i >= 0; i--) {
+    const r = rings[i];
+    r.r += r.speed;
+    r.life -= 0.015;
+    r.alpha *= 0.97;
+    if (r.life <= 0 || r.r > r.maxR) { rings.splice(i, 1); continue; }
+    ctx.beginPath();
+    ctx.arc(r.x, r.y, r.r, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(${r.col.r},${r.col.g},${r.col.b},${r.alpha * r.life})`;
+    ctx.lineWidth = r.width;
+    ctx.stroke();
+    if (r.flash) {
+      ctx.fillStyle = `rgba(${r.col.r},${r.col.g},${r.col.b},${r.alpha * r.life * 0.1})`;
+      ctx.fill();
+    }
+  }
+
+  // Lines (beams)
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const l = lines[i];
+    l.length = Math.min(l.length + l.speed, l.maxLength);
+    l.life -= 0.02;
+    if (l.life <= 0) { lines.splice(i, 1); continue; }
+    ctx.beginPath();
+    ctx.moveTo(l.x, l.y);
+    ctx.lineTo(l.x + Math.cos(l.angle)*l.length, l.y + Math.sin(l.angle)*l.length);
+    ctx.strokeStyle = `rgba(${l.col.r},${l.col.g},${l.col.b},${l.life * l.alpha})`;
+    ctx.lineWidth = l.width * l.life;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    // Glow
+    ctx.strokeStyle = `rgba(${l.col.r},${l.col.g},${l.col.b},${l.life * 0.15})`;
+    ctx.lineWidth = l.width * l.life * 4;
+    ctx.stroke();
+  }
+
+  // Trails (wave effects)
+  for (let i = trails.length - 1; i >= 0; i--) {
+    const t = trails[i];
+    t.life -= t.decay;
+    t.phase += t.freq * 60;
+    if (t.life <= 0) { trails.splice(i, 1); continue; }
+    ctx.beginPath();
+    for (let x = 0; x < W; x += 3) {
+      const y = t.y + Math.sin(x * 0.02 + t.phase) * t.amp * t.life;
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(${t.col.r},${t.col.g},${t.col.b},${t.alpha * t.life})`;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    if (p.delay && p.delay > 0) { p.delay -= 0.016; continue; }
+    if (p.orbit) {
+      p.orbitAngle += p.orbitSpeed;
+      p.x = p.orbitCx + Math.cos(p.orbitAngle) * p.orbitR;
+      p.y = p.orbitCy + Math.sin(p.orbitAngle) * p.orbitR;
+      p.orbitR += 0.3;
+    } else {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vx *= 0.98;
+      p.vy *= 0.98;
+    }
+    p.life -= p.decay;
+    if (p.life <= 0) { particles.splice(i, 1); continue; }
+    const a = p.life * 0.8;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${p.col.r},${p.col.g},${p.col.b},${a})`;
+    ctx.fill();
+    // Soft glow
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life * 3, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${p.col.r},${p.col.g},${p.col.b},${a * 0.1})`;
+    ctx.fill();
+  }
+
+  requestAnimationFrame(render);
+}
+
+// Periodically update history timestamps
+setInterval(() => {
+  const el = document.getElementById('history');
+  el.innerHTML = history.map((h, i) => {
+    const c = GESTURE_COLORS[h.gesture];
+    const ago = ((Date.now() - h.time) / 1000).toFixed(1);
+    return `<div class="hist-item" style="color:rgb(${c.r},${c.g},${c.b})">${h.gesture.toUpperCase()} ${(h.conf*100).toFixed(0)}%  <span style="color:#444">${ago}s</span></div>`;
+  }).join('');
+}, 500);
+
+render();
+</script>
+</body>
+</html>

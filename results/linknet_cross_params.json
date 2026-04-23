@@ -1,0 +1,21 @@
+{
+  "norm_scale": 32768.0,
+  "seq_len": 128,
+  "in_channels": 6,
+  "class_names": [
+    "beat",
+    "stab",
+    "spin",
+    "slash",
+    "shake",
+    "flick",
+    "wing"
+  ],
+  "transform": "diff = (IMU_A - IMU_B) / 2 / 32768.0",
+  "persons": [
+    "zuchen",
+    "tiffany",
+    "xiaolan",
+    "yoyo"
+  ]
+}

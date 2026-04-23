@@ -2,6 +2,12 @@
 
 A gesture-recognition conducting baton powered by dual IMUs and machine learning. Wave, strike, spin — the baton knows what you did.
 
+## Demo
+
+[▶ Watch the demo](docs/demo.mp4)
+
+https://github.com/Links2568/MagicBaton/raw/main/docs/demo.mp4
+
 ## Hardware
 
 - **ESP32** microcontroller
@@ -25,18 +31,31 @@ A,ax,ay,az,gx,gy,gz|B,ax,ay,az,gx,gy,gz
 
 ```
 MagicBaton/
-├── HW/
-│   ├── baton_bluetooth/
-│   │   └── baton_bluetooth.ino   # ESP32 firmware (BLE + Serial)
-│   ├── baton_ap/
-│   │   └── baton_ap.ino          # WiFi AP firmware (alternative)
-│   └── baton_imu/
-│       └── baton_imu.ino         # WiFi STA firmware (alternative)
-├── record.py                      # GUI data recorder for ML training
-├── server.py                      # WebSocket bridge (Serial → browser)
-├── index.html                     # Real-time dashboard + visualizer
-├── data/                          # Recorded gesture data (CSV + metadata)
-│   └── metadata.json
+├── firmware/                   # ESP32 Arduino sketches
+│   ├── baton_bluetooth/        # BLE + USB Serial (recommended)
+│   ├── baton_ap/               # WiFi AP (alternative)
+│   └── baton_imu/              # WiFi STA (alternative)
+├── dataset/                    # Public gesture dataset (4 subjects, ~934 CSVs)
+│   ├── README.md
+│   └── {zuchen,yoyo,tiffany,xiaolan}/
+├── models/                     # Pre-trained weights
+│   ├── linknet.pt              # single-subject CNN
+│   ├── linknet_cross.pt        # cross-subject CNN
+│   └── beat_svm.pkl            # beat-detection SVM
+├── training/                   # Training + plotting scripts
+│   ├── train_linknet.py             # single-subject (zuchen)
+│   ├── train_linknet_cross.py       # cross-subject, 4-subject pool
+│   ├── train_linknet_lopo_compare.py# LOPO vs 5-fold comparison
+│   ├── train_linknet_rigid.py       # rigid-body feature ablation
+│   ├── train_beat_svm.py            # beat-only SVM classifier
+│   └── plot_*.py                    # figure generators
+├── realtime/                   # Live demo and data capture
+│   ├── server.py               # BLE → WebSocket bridge, runs inference
+│   ├── record.py               # GUI data recorder
+│   ├── index.html              # Dashboard + MIDI player
+│   └── gesture_viz.html        # Gesture visualization
+├── results/                    # Experiment figures and reports
+├── docs/                       # Images used in this README
 └── README.md
 ```
 
@@ -49,18 +68,23 @@ cd MagicBaton
 pip install -r requirements.txt
 
 # 2. Flash firmware (connect ESP32 via USB)
-arduino-cli compile --fqbn esp32:esp32:esp32 HW/baton_bluetooth/baton_bluetooth.ino
-arduino-cli upload --fqbn esp32:esp32:esp32 --port /dev/cu.usbserial-0001 HW/baton_bluetooth/baton_bluetooth.ino
+arduino-cli compile --fqbn esp32:esp32:esp32 firmware/baton_bluetooth/baton_bluetooth.ino
+arduino-cli upload --fqbn esp32:esp32:esp32 --port /dev/cu.usbserial-0001 firmware/baton_bluetooth/baton_bluetooth.ino
 
-# 3. Record gesture data (this is what you need for ML training)
-python record.py
+# 3a. Try the pre-trained models in the live dashboard
+python realtime/server.py        # loads models/ and serves WebSocket on :8765
+open realtime/index.html         # open in browser, connects to server.py
 
-# 4. (Optional) Run debug dashboard for real-time visualization
-#    This is a separate tool for debugging and future demo purposes.
-#    NOT required for data collection.
-python server.py        # reads USB Serial, serves WebSocket on :8765
-open index.html         # open in browser, connects to server.py
+# 3b. Or record new gesture data for training
+python realtime/record.py        # saves to realtime/data/
+
+# 4. Retrain from the public dataset
+python training/train_linknet.py          # single-subject CNN/RNN/SVM/RF
+python training/train_linknet_cross.py    # 4-subject pooled, LOPO + 5-fold
+python training/train_beat_svm.py         # beat-detection SVM for realtime
 ```
+
+See [`dataset/README.md`](dataset/README.md) for the dataset schema.
 
 ## Gesture Reference
 
@@ -139,7 +163,7 @@ Trace the letter W in the air with the baton tip. Zig-zag up and down, roughly 2
 
 ## How to Record
 
-1. Run `python record.py` and wait for BLE connection
+1. Run `python realtime/record.py` and wait for BLE connection
 2. **Click** the gesture you want to record in the left panel
 3. Get the baton into the **starting position** for that gesture
 4. Press **Space** to start recording
@@ -177,7 +201,7 @@ Good example:
 - Record 25-30 reps per gesture
 - Vary your speed and intensity across reps — don't be too consistent
 - Keep the baton orientation the same between recording and inference
-- The recorder saves each rep as a separate CSV in `data/`
+- The recorder saves each rep as a separate CSV in `realtime/data/`
 - `metadata.json` tracks all sessions for easy loading during training
 
 ## Architecture
@@ -185,9 +209,9 @@ Good example:
 ```
 ESP32 + 2x MPU6050
        │
-       ├── BLE notify ──→ record.py (GUI recorder, saves CSV)
+       ├── BLE notify ──→ realtime/record.py   (GUI recorder, saves CSV)
        │
-       └── USB Serial ──→ server.py ──→ WebSocket ──→ index.html (dashboard)
+       └── USB Serial ──→ realtime/server.py ──→ WebSocket ──→ realtime/index.html (dashboard)
 ```
 
 The dashboard displays real-time sensor waveforms, beat detection (jerk-based), BPM tracking, dynamics (pp-ff), and a visual effects canvas that responds to baton motion.
