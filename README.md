@@ -4,9 +4,9 @@ A gesture-recognition conducting baton powered by dual IMUs and machine learning
 
 ## Demo
 
-[▶ Watch the demo](docs/demo.mp4)
+[▶ Watch the demo](docs/Baton_Video_Demo.mov)
 
-https://github.com/Links2568/MagicBaton/raw/main/docs/demo.mp4
+https://github.com/Links2568/MagicBaton/raw/main/docs/Baton_Video_Demo.mov
 
 ## Hardware
 
