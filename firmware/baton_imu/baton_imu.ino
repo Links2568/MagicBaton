@@ -65,7 +65,7 @@ void loop() {
   Wire.endTransmission(false);
   Wire.requestFrom(IMU_B_ADDR, 14);
   axB = Wire.read()<<8|Wire.read(); ayB = Wire.read()<<8|Wire.read(); azB = Wire.read()<<8|Wire.read();
-  Wire.read(); Wire.read(); // 跳过 Temp
+  Wire.read(); Wire.read(); // skip Temp
   gxB = Wire.read()<<8|Wire.read(); gyB = Wire.read()<<8|Wire.read(); gzB = Wire.read()<<8|Wire.read();
 
   // A,ax,ay,az,gx,gy,gz|B,ax,ay,az,gx,gy,gz

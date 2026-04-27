@@ -26,7 +26,7 @@ while True:
         data, addr = sock.recvfrom(1024)
         message = data.decode('utf-8')
         
-        # 数据解析: A,ax,ay,az,gx,gy,gz|B,ax,ay,az,gx,gy,gz
+        # Parse: A,ax,ay,az,gx,gy,gz|B,ax,ay,az,gx,gy,gz
         try:
             parts = message.split('|')
             imu_a = parts[0].split(',')

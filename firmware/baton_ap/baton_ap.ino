@@ -8,7 +8,7 @@ const char* password = "12345678";
 const char* udpAddress = "192.168.4.2";    
 const int udpPort = 4210;                   
 
-// --- IMU 地址与寄存器 [cite: 3] ---
+// --- IMU addresses and registers ---
 #define IMU_A_ADDR 0x68
 #define IMU_B_ADDR 0x69
 #define REG_PWR_MGMT_1 0x6B
@@ -38,7 +38,7 @@ void setup() {
 
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
-  Serial.println(myIP); // 默认应为 192.168.4.1
+  Serial.println(myIP); // defaults to 192.168.4.1
 
   // Initialize the sensors
   initIMU(IMU_A_ADDR);
