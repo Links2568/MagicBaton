@@ -492,6 +492,56 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
 }
 .midi-bpm-row input[type="checkbox"] { accent-color: var(--pink); }
 
+/* ── Generate panel ── */
+.midi-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,128,171,0.25), transparent);
+  margin: 12px 0 10px;
+}
+.gen-row {
+  display: flex; flex-direction: column; gap: 8px;
+  font-family: var(--mono);
+}
+.gen-head {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.gen-title {
+  color: var(--pink); font-size: 10px;
+  letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+}
+.gen-status { font-size: 9px; color: var(--text3); letter-spacing: 0.4px; }
+.gen-status.ready { color: #00e676; }
+.gen-status.busy  { color: var(--pink); }
+.gen-status.err   { color: #ff5252; }
+.gen-controls {
+  display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end;
+}
+.gen-controls label {
+  display: flex; flex-direction: column; gap: 2px;
+  font-size: 9px; color: var(--text3); letter-spacing: 0.5px;
+}
+.gen-controls input[type=range] { width: 100%; accent-color: var(--pink); }
+.gen-controls .val { color: var(--text2); font-size: 9px; }
+.midi-btn.primary {
+  border-color: var(--pink); color: var(--pink);
+  width: auto; padding: 0 10px; font-size: 10px; letter-spacing: 0.5px;
+}
+.midi-btn.primary:hover:not(:disabled) {
+  background: rgba(255,128,171,0.12);
+}
+.gm-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 4px; font-size: 10px; color: var(--text3);
+}
+.gm-toggle { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.gm-toggle input { accent-color: var(--pink); }
+.gm-hint {
+  color: var(--pink); font-size: 9px; letter-spacing: 1px;
+  text-transform: uppercase; font-weight: 600;
+  opacity: 0; transition: opacity 0.25s;
+}
+.gm-hint.show { opacity: 1; }
+
 /* ── Slider Controls ── */
 .control-row {
   display: flex; align-items: center; gap: 8px;
@@ -661,13 +711,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
           <input type="range" id="ctrlSmoothing" min="1" max="50" value="22">
           <span class="ctrl-val" id="ctrlSmoothingVal">0.22</span>
         </div>
-        <div class="control-row" style="margin-top:8px">
-          <label>Mode</label>
-          <select id="ctrlBeatMode" class="midi-select" style="flex:1; margin-right:4px">
-            <option value="jerk">Jerk threshold</option>
-            <option value="svm">SVM (server)</option>
-          </select>
-        </div>
         <div class="control-row">
           <label>Down Cone</label>
           <input type="range" id="ctrlDownCone" min="-10" max="90" step="5" value="60">
@@ -710,6 +753,29 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
           <label><input type="checkbox" id="midiFollowBpm" checked> Follow Baton</label>
           <span id="midiCurrentBpm">-- BPM</span>
         </div>
+
+        <div class="midi-divider"></div>
+        <div class="gen-row">
+          <div class="gen-head">
+            <span class="gen-title">AI Generate</span>
+            <span class="gen-status" id="genStatus">loading model…</span>
+          </div>
+          <div class="gen-controls">
+            <label>Length <span class="val" id="genLengthVal">128</span>
+              <input type="range" id="genLength" min="32" max="256" step="32" value="128">
+            </label>
+            <label>Temp <span class="val" id="genTempVal">1.10</span>
+              <input type="range" id="genTemp" min="60" max="180" step="5" value="110">
+            </label>
+            <button class="midi-btn primary" id="genBtn" disabled>Generate</button>
+          </div>
+          <div class="gm-row">
+            <label class="gm-toggle">
+              <input type="checkbox" id="gmEnable" checked> Gesture → Music
+            </label>
+            <span class="gm-hint" id="gmHint"></span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -723,6 +789,9 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); col
 
 <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
 <script src="https://unpkg.com/@tonejs/midi@2.0.28/build/Midi.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.23.1/es6/core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.23.1/es6/music_rnn.js"></script>
 
 <script>
 const MIDI_LIBRARY = {
@@ -755,7 +824,6 @@ for (const k in hist) for (let i=0;i<HIST_LEN;i++) hist[k].push(0);
 
 let beatThreshold = 12000;
 let smoothAlpha = 0.22;
-let beatMode = 'jerk';  // 'jerk' or 'svm'
 let smoothA = [0,0,0], smoothB = [0,0,0];
 let baselineA = [0,0,0], baselineB = [0,0,0];
 let baselineSamples = 0;
@@ -1074,6 +1142,213 @@ function setupMidiPlayer() {
 }
 
 // ═══════════════════════════════════════
+// AI Generation (Magenta MusicRNN) + Gesture-driven music
+// ═══════════════════════════════════════
+let mmRnn = null;
+let mmReady = false;
+let mmBusy  = false;
+let lastGenSeq = null;     // most recent generated NoteSequence (for "continue")
+
+function setGenStatus(text, cls) {
+  const el = document.getElementById('genStatus');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.remove('ready', 'busy', 'err');
+  if (cls) el.classList.add(cls);
+}
+
+async function initMagenta() {
+  if (typeof music_rnn === 'undefined' || typeof core === 'undefined') {
+    setGenStatus('magenta unavailable', 'err');
+    return;
+  }
+  try {
+    mmRnn = new music_rnn.MusicRNN(
+      'https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn'
+    );
+    await mmRnn.initialize();
+    mmReady = true;
+    setGenStatus('ready', 'ready');
+    document.getElementById('genBtn').disabled = false;
+  } catch (e) {
+    console.warn('[Magenta] init failed', e);
+    setGenStatus('load failed', 'err');
+  }
+}
+
+// C-major arpeggio seed (16 sixteenths = 4 quarters = 1 bar)
+function makeSeed(rootShift = 0) {
+  const base = [60, 64, 67, 72];
+  return {
+    notes: base.map((p, i) => ({
+      pitch: p + rootShift,
+      quantizedStartStep: i * 4,
+      quantizedEndStep: (i + 1) * 4,
+    })),
+    quantizationInfo: { stepsPerQuarter: 4 },
+    tempos: [{ time: 0, qpm: 110 }],
+    totalQuantizedSteps: 16,
+  };
+}
+
+async function generateMidi({ prime = null, steps = 128, temperature = 1.1, autoplay = false } = {}) {
+  if (!mmReady || mmBusy) return;
+  mmBusy = true;
+  setGenStatus('generating…', 'busy');
+  document.getElementById('genBtn').disabled = true;
+  try {
+    const seed = prime || makeSeed();
+    const cont = await mmRnn.continueSequence(seed, steps, temperature);
+    const merged = core.sequences.concatenate([seed, cont]);
+    lastGenSeq = merged;
+
+    // Magenta NoteSequence omits velocity by default → MIDI Note-On with vel 0 is treated
+    // as Note-Off, producing a silent file. Assign a default velocity per note.
+    merged.notes.forEach((n, i) => {
+      if (!n.velocity) n.velocity = 80 + ((i * 7) % 30);  // 80–110 for slight variation
+    });
+
+    const unq = merged.quantizationInfo
+      ? core.sequences.unquantizeSequence(merged, 110)
+      : merged;
+    const midiBytes = core.sequenceProtoToMidi(unq);
+
+    midiStopPlayback();
+    midiParsedData = new Midi(midiBytes.buffer);
+    midiOrigBPM = (midiParsedData.header.tempos && midiParsedData.header.tempos[0])
+      ? Math.round(midiParsedData.header.tempos[0].bpm) : 110;
+    const totalNotes = midiParsedData.tracks.reduce((s, t) => s + t.notes.length, 0);
+    document.getElementById('midiInfo').textContent = '🪄 generated — ' + totalNotes + ' notes';
+    document.getElementById('midiBadge').textContent = midiOrigBPM + ' BPM';
+    document.getElementById('midiCurrentBpm').textContent = midiOrigBPM + ' BPM';
+    document.getElementById('midiPlayBtn').disabled = false;
+    scheduleMidiNotes();
+    setGenStatus('ready', 'ready');
+    if (autoplay) await midiStartPlayback();
+  } catch (e) {
+    console.warn('[Magenta] generate failed', e);
+    setGenStatus('error', 'err');
+  } finally {
+    mmBusy = false;
+    document.getElementById('genBtn').disabled = !mmReady;
+  }
+}
+
+// ── Gesture-driven music ──
+let gmEnabled    = true;
+let gmLastG      = 'idle';
+let gmLastFireMs = 0;
+let gmAccent     = null;
+
+function ensureAccentSynth() {
+  if (!window.Tone || gmAccent) return;
+  gmAccent = new Tone.PolySynth(Tone.Synth, {
+    maxPolyphony: 12,
+    oscillator: { type: 'sawtooth' },
+    envelope: { attack: 0.004, decay: 0.18, sustain: 0.12, release: 0.45 },
+  }).toDestination();
+  gmAccent.volume.value = -10;
+}
+
+function flashHint(text, color) {
+  const el = document.getElementById('gmHint');
+  if (!el) return;
+  el.textContent = text;
+  if (color) el.style.color = color;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 1400);
+}
+
+// Schedule on next 8th if Transport running, else immediate
+function fireQuantized(fn) {
+  if (window.Tone && Tone.Transport.state === 'started') {
+    Tone.Transport.scheduleOnce(fn, '@8n');
+  } else {
+    fn(Tone.now ? Tone.now() : 0);
+  }
+}
+
+const GM_HANDLERS = {
+  stab: () => {                                // sharp accent chord
+    ensureAccentSynth();
+    fireQuantized((t) => {
+      gmAccent.triggerAttackRelease(['C4', 'E4', 'G4', 'B4'], '4n', t, 0.95);
+    });
+    flashHint('STAB → ACCENT', '#18ffff');
+  },
+  flick: () => {                               // tiny ornament
+    ensureAccentSynth();
+    fireQuantized((t) => {
+      gmAccent.triggerAttackRelease('D6',  '32n', t,        0.7);
+      gmAccent.triggerAttackRelease('F#6', '32n', t + 0.05, 0.6);
+      gmAccent.triggerAttackRelease('A6',  '16n', t + 0.10, 0.65);
+    });
+    flashHint('FLICK → ORNAMENT', '#ff80ab');
+  },
+  shake: () => {                               // tritone tremolo cluster
+    ensureAccentSynth();
+    const notes = ['C5', 'F#5', 'C5', 'F#5', 'D5', 'G#5', 'D5', 'G#5'];
+    const start = (window.Tone && Tone.now) ? Tone.now() : 0;
+    notes.forEach((n, i) => {
+      gmAccent.triggerAttackRelease(n, '16n', start + i * 0.06, 0.55);
+    });
+    flashHint('SHAKE → TREMOLO', '#00e676');
+  },
+  slash: async () => {                         // hard cut: fresh fragment
+    flashHint('SLASH → CUT', '#ff5252');
+    if (!mmReady) return;
+    const fresh = makeSeed(Math.floor((Math.random() - 0.5) * 12));  // random transposition
+    await generateMidi({ prime: fresh, steps: 96, temperature: 1.35, autoplay: true });
+  },
+  wing: async () => {                          // continue current piece
+    flashHint('WING → CONTINUE', '#448aff');
+    if (!mmReady) return;
+    const prime = lastGenSeq || makeSeed();
+    await generateMidi({ prime, steps: 160, temperature: 1.0, autoplay: true });
+  },
+  spin: async () => {                          // morph: high-temp from current
+    flashHint('SPIN → MORPH', '#b388ff');
+    if (!mmReady) return;
+    const prime = lastGenSeq || makeSeed();
+    await generateMidi({ prime, steps: 128, temperature: 1.55, autoplay: true });
+  },
+  // beat: leave alone — already drives BPM via the jerk-threshold detector
+};
+
+function dispatchGestureMusic(d) {
+  if (!gmEnabled || !d || !d.gesture) return;
+  const g = d.gesture;
+  // Edge-trigger: only on transition into a non-idle gesture
+  if (g === 'idle' || g === 'beat') { gmLastG = g; return; }
+  const now = performance.now();
+  if (g !== gmLastG && (now - gmLastFireMs) > 700) {
+    gmLastFireMs = now;
+    const h = GM_HANDLERS[g];
+    if (h) try { h(); } catch (e) { console.warn('[GM] handler failed', g, e); }
+  }
+  gmLastG = g;
+}
+
+function setupGenerateUI() {
+  const lenEl = document.getElementById('genLength');
+  const tmpEl = document.getElementById('genTemp');
+  const lenVal = document.getElementById('genLengthVal');
+  const tmpVal = document.getElementById('genTempVal');
+  lenEl.addEventListener('input', () => { lenVal.textContent = lenEl.value; });
+  tmpEl.addEventListener('input', () => { tmpVal.textContent = (tmpEl.value / 100).toFixed(2); });
+  document.getElementById('genBtn').addEventListener('click', () => {
+    generateMidi({
+      steps: parseInt(lenEl.value),
+      temperature: parseInt(tmpEl.value) / 100,
+    });
+  });
+  document.getElementById('gmEnable').addEventListener('change', (e) => {
+    gmEnabled = e.target.checked;
+  });
+}
+
+// ═══════════════════════════════════════
 // Charts Setup
 // ═══════════════════════════════════════
 const charts = {};
@@ -1293,13 +1568,7 @@ function processData(d) {
     }
   }
 
-  let triggerBeat = false;
-  if (beatMode === 'jerk') {
-    triggerBeat = (combinedJerk >= beatThreshold && prevJerkA < beatThreshold && cooldownOk);
-  } else if (beatMode === 'svm') {
-    triggerBeat = !!(d.svm_beat) && cooldownOk;
-  }
-
+  let triggerBeat = (combinedJerk >= beatThreshold && prevJerkA < beatThreshold && cooldownOk);
   if (triggerBeat && !isDownward) triggerBeat = false;
 
   if (triggerBeat) {
@@ -1621,14 +1890,6 @@ function setupControls() {
     document.getElementById('ctrlSmoothingVal').textContent = smoothAlpha.toFixed(2);
   });
 
-  const modeSelect = document.getElementById('ctrlBeatMode');
-  modeSelect.addEventListener('change', () => {
-    beatMode = modeSelect.value;
-    // Reset so new mode starts fresh
-    beatTimes = [];
-    currentBPM = 0;
-  });
-
   const downCone = document.getElementById('ctrlDownCone');
   downCone.addEventListener('input', () => {
     downCosMin = parseInt(downCone.value) / 100;
@@ -1653,6 +1914,7 @@ let lastMags = null;
 
 function mainLoop() {
   if (latestData) {
+    dispatchGestureMusic(latestData);
     lastMags = processData(latestData);
     latestData = null;
   }
@@ -1669,6 +1931,8 @@ function init() {
   initVisualCanvas();
   setupControls();
   setupMidiPlayer();
+  setupGenerateUI();
+  initMagenta();
   connectWS();
   requestAnimationFrame(mainLoop);
 

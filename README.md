@@ -40,19 +40,17 @@ MagicBaton/
 │   └── {zuchen,yoyo,tiffany,xiaolan}/
 ├── models/                     # Pre-trained weights
 │   ├── linknet.pt              # single-subject CNN
-│   ├── linknet_cross.pt        # cross-subject CNN
-│   └── beat_svm.pkl            # beat-detection SVM
+│   └── linknet_cross.pt        # cross-subject CNN (used at inference)
 ├── training/                   # Training + plotting scripts
 │   ├── train_linknet.py             # single-subject (zuchen)
 │   ├── train_linknet_cross.py       # cross-subject, 4-subject pool
 │   ├── train_linknet_lopo_compare.py# LOPO vs 5-fold comparison
 │   ├── train_linknet_rigid.py       # rigid-body feature ablation
-│   ├── train_beat_svm.py            # beat-only SVM classifier
 │   └── plot_*.py                    # figure generators
 ├── realtime/                   # Live demo and data capture
-│   ├── server.py               # BLE → WebSocket bridge, runs inference
+│   ├── server.py               # BLE → WebSocket bridge, runs CNN gesture inference
 │   ├── record.py               # GUI data recorder
-│   ├── index.html              # Dashboard + MIDI player
+│   ├── index.html              # Dashboard + MIDI player + AI generation
 │   └── gesture_viz.html        # Gesture visualization
 ├── results/                    # Experiment figures and reports
 ├── docs/                       # Images used in this README
@@ -81,8 +79,12 @@ python realtime/record.py        # saves to realtime/data/
 # 4. Retrain from the public dataset
 python training/train_linknet.py          # single-subject CNN/RNN/SVM/RF
 python training/train_linknet_cross.py    # 4-subject pooled, LOPO + 5-fold
-python training/train_beat_svm.py         # beat-detection SVM for realtime
 ```
+
+> **First-load note (AI Generate panel)**: the dashboard fetches a ~16 MB
+> Magenta `MusicRNN` checkpoint from Google Cloud the first time it loads.
+> Expect 5–10 s for the `Generate` button to enable; subsequent loads use
+> the browser cache.
 
 See [`dataset/README.md`](dataset/README.md) for the dataset schema.
 
@@ -207,14 +209,30 @@ Good example:
 ## Architecture
 
 ```
-ESP32 + 2x MPU6050
-       │
-       ├── BLE notify ──→ realtime/record.py   (GUI recorder, saves CSV)
-       │
-       └── USB Serial ──→ realtime/server.py ──→ WebSocket ──→ realtime/index.html (dashboard)
+ESP32 + 2x MPU6050             realtime/server.py             realtime/index.html
+┌──────────────┐                ┌────────────────────┐         ┌──────────────────────┐
+│ I²C @ 400kHz │   BLE notify   │ BLE client         │   WS    │ WebSocket client     │
+│  ↓ 50Hz      │───────────────▶│  ↓ JSON / sample   │ :8765   │  ↓ per-frame route   │
+│ pack ASCII   │                │ CNN gesture cls    │────────▶│  ├─ jerk → BPM       │
+│ A,…|B,…      │                │ (LinkNet, PyTorch) │         │  ├─ accent synth     │
+└──────────────┘                └────────────────────┘         │  └─ MusicRNN (TF.js) │
+                                                               │     → Tone.Transport │
+                       ┌──────────────────────┐                │     → PolySynth      │
+                       │ realtime/record.py   │                └──────────────────────┘
+                       │ GUI recorder → CSV   │
+                       └──────────────────────┘
 ```
 
-The dashboard displays real-time sensor waveforms, beat detection (jerk-based), BPM tracking, dynamics (pp-ff), and a visual effects canvas that responds to baton motion.
+**Where ML runs:**
+
+| Stage | Model | Where | Inputs |
+|---|---|---|---|
+| Gesture classification | LinkNet 1-D CNN (~90 k params) | server.py (host CPU) | Jerk-triggered 128-sample 6-channel diff window |
+| Beat / BPM detection | Jerk rising-edge detector | browser | Per-frame jerk magnitude |
+| Music generation | Magenta `MusicRNN basic_rnn` (~3 M params) | **browser, TF.js** | Quantised NoteSequence prime + temperature |
+| Audio synthesis | `Tone.PolySynth` (saw/triangle) | browser, WebAudio | Scheduled note events |
+
+The ESP32 itself runs **no ML** — it acts purely as a 50 Hz sensor relay. All inference happens at the edges of the network: gesture recognition on the host workstation, music generation in the browser. The dashboard displays real-time sensor waveforms, jerk-based beat detection, BPM tracking, dynamics (pp–ff), an AI-generated MIDI player, and a visual effects canvas that responds to baton motion.
 
 ## Beat Detection
 
@@ -328,6 +346,55 @@ When the user unchecks "Follow Baton", the system immediately hard-sets `Tone.Tr
 ### MIDI library
 
 A built-in library of base64-encoded MIDI files (e.g., Beethoven Symphony No. 7 Mov. 2) is stored in the `MIDI_LIBRARY` object. These are decoded at load time via `atob()` → `Uint8Array` → `ArrayBuffer` → `new Midi()`, following the same parsing and scheduling pipeline as uploaded files.
+
+## AI Music Generation
+
+[▶ Watch the music demo](docs/Music_Demo.mov)
+
+https://github.com/Links2568/MagicBaton/raw/main/docs/Music_Demo.mov
+
+The dashboard includes an in-browser symbolic-music generator powered by **Magenta.js** running on **TensorFlow.js**. No Python service is required for generation — the model is fetched once from Google Cloud (~16 MB), cached in the browser, and runs entirely client-side.
+
+### Dependencies
+
+- **[@tensorflow/tfjs](https://www.tensorflow.org/js)** (`tf` global): provides the WebGL/CPU backend for `MusicRNN`.
+- **[@magenta/music](https://github.com/magenta/magenta-js)** (`core`, `music_rnn` globals): supplies the `MusicRNN` class, NoteSequence proto utilities, and `sequenceProtoToMidi` serializer.
+- Checkpoint: [`music_rnn/basic_rnn`](https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn) — single-voice melody RNN, ~3 M parameters.
+
+### Generate panel
+
+Below the MIDI Player, the **AI Generate** panel exposes:
+
+| Control | Range | Effect |
+|---|---|---|
+| `Length` | 32–256 RNN steps | How many 16th-notes the model continues past the seed |
+| `Temp`   | 0.60–1.80 | Sampling temperature; higher = more entropic / dissonant |
+| `Generate` | button | Runs `mmRnn.continueSequence(seed, steps, temperature)` and loads the result into the MIDI player |
+| `Gesture → Music` | toggle | Enables/disables the per-gesture music actions described below |
+
+The seed is a 1-bar C-major arpeggio (`C4–E4–G4–C5`); the continuation is concatenated with the seed, velocity-corrected (Magenta's quantised proto omits velocity, which would silence MIDI Note-On events), unquantised, serialised to SMF bytes, and parsed back through `@tonejs/midi` so the existing playback path can drive it.
+
+### Gesture-to-music routing
+
+Beyond playback control, the seven CNN-recognised gestures are routed to **three concurrent musical channels** by the `dispatchGestureMusic(d)` function (edge-triggered with a 700 ms safety cooldown):
+
+| Channel | Triggered by | Action | Touches `midiParsedData`? |
+|---|---|---|---|
+| **Tempo** (continuous) | regular pulse waving | Jerk beat detector → BPM → `Tone.Transport.bpm.rampTo` | No (only the playback clock) |
+| **Accent** (additive overlay) | `stab` / `flick` / `shake` | One-shot events on a separate `Tone.PolySynth`, quantised to the next 8th note | No (layered on top) |
+| **Content** (replace + regenerate) | `slash` / `wing` / `spin` | Calls `MusicRNN.continueSequence` with a per-gesture prime and temperature, then replaces the playing MIDI | **Yes** (piece is regenerated) |
+
+Per-gesture detail for the content channel:
+
+| Gesture | Prime | Temperature | Steps | Effect |
+|---|---|---|---|---|
+| `slash` | Fresh seed, randomly transposed ±6 semitones | 1.35 | 96 | Hard cut to an unrelated new fragment |
+| `wing`  | `lastGenSeq` (previous generation) | 1.0 | 160 | Stylistically continuous extension |
+| `spin`  | `lastGenSeq` | 1.55 | 128 | High-entropy variation on the current piece |
+
+The `beat` gesture is intentionally not routed to a music action — it is reserved for the BPM channel so that conducting downbeats remain a pure tempo signal rather than a generative event. The accent gestures (`stab`/`flick`/`shake`) never invoke the model and have effectively zero latency; the content gestures invoke a single forward pass through `MusicRNN` (~50–300 ms on a modern laptop) and then schedule the result onto `Tone.Transport`.
+
+Together, the three channels close a perception–generation loop in which the conductor simultaneously *paces* the music (channel 1), *ornaments* it (channel 2), and *recomposes* it (channel 3), all sharing the same gestural classifier and the same `Tone.Transport` clock.
 
 ## License
 

@@ -2,17 +2,15 @@
 MagicBaton WebSocket Bridge
 Reads IMU data from ESP32 via BLE and forwards to browser via WebSocket.
 Falls back to mock data when no hardware is connected.
-Runs SVM-based beat detection + CNN gesture classification on sliding windows.
+Runs CNN gesture classification on jerk-triggered sliding windows.
+Beat detection runs client-side in the browser using the jerk threshold.
 """
 
 import asyncio
-import collections
 import json
 import math
 import os
-import pickle
 import time
-import warnings
 
 import numpy as np
 import torch
@@ -21,8 +19,6 @@ import torch.nn.functional as F
 import websockets
 from bleak import BleakClient, BleakScanner
 
-warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
-
 # --- Config ---
 BLE_DEVICE_NAME = "MagicBaton"
 BLE_TX_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
@@ -30,14 +26,7 @@ WS_HOST = "0.0.0.0"
 WS_PORT = 8765
 NORM_SCALE = 32768.0
 
-# SVM beat detection (matches train_beat_svm.py)
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SVM_MODEL_PATH = os.path.join(_ROOT, "models", "beat_svm.pkl")
-SVM_WINDOW = 22          # ~440ms — short enough to isolate a single rapid beat
-SVM_STRIDE = 1           # classify every new sample (~20ms) for fast response
-SVM_TRIGGER_HIGH = 0.55  # rising-edge threshold: prob must exceed this
-SVM_TRIGGER_LOW = 0.30   # must fall below this before another beat can fire
-SVM_COOLDOWN = 0.12      # minimum seconds between detections (safety only)
 
 # CNN gesture detection (matches train_linknet_cross.py)
 CNN_MODEL_PATH = os.path.join(_ROOT, "models", "linknet_cross.pt")
@@ -53,15 +42,6 @@ connected_clients = set()
 latest_data = None
 use_mock = True
 
-# SVM state
-svm_model = None
-svm_scaler = None
-svm_buffer = collections.deque(maxlen=SVM_WINDOW)
-svm_samples_since_last = 0
-svm_last_beat_time = 0.0
-svm_armed = True         # True → next rising edge will fire; False → must dip below LOW first
-svm_last_event = None
-
 # CNN state
 cnn_model = None
 cnn_state = "IDLE"          # IDLE -> RECORDING -> COOLDOWN
@@ -69,82 +49,6 @@ cnn_prev_diff = None        # previous diff sample for jerk calculation
 cnn_record_buf = []         # samples collected after trigger
 cnn_trigger_time = 0.0      # when jerk triggered
 cnn_last_gesture_time = 0.0
-
-
-def load_svm():
-    global svm_model, svm_scaler
-    try:
-        with open(SVM_MODEL_PATH, "rb") as f:
-            obj = pickle.load(f)
-        svm_scaler = obj["scaler"]
-        svm_model = obj["model"]
-        print(f"[SVM] Loaded {SVM_MODEL_PATH}", flush=True)
-    except Exception as e:
-        print(f"[SVM] Failed to load: {e}", flush=True)
-
-
-def extract_features(seq):
-    """Match train_beat_svm.py exactly: (T, 6) diff-signal -> 82 features."""
-    T, C = seq.shape
-    feats = []
-    for c in range(C):
-        ch = seq[:, c]
-        m, s = np.mean(ch), np.std(ch)
-        feats.extend([
-            m, s, np.min(ch), np.max(ch), np.max(ch) - np.min(ch),
-            np.median(ch),
-            np.mean(((ch - m) / (s + 1e-10)) ** 3),
-            np.mean(((ch - m) / (s + 1e-10)) ** 4) - 3,
-            np.sum(ch ** 2) / T,
-            np.sum(np.diff(np.sign(ch)) != 0) / max(T - 1, 1),
-            np.percentile(ch, 25), np.percentile(ch, 75),
-            np.percentile(ch, 75) - np.percentile(ch, 25),
-        ])
-    accel_mag = np.sqrt(np.sum(seq[:, :3] ** 2, axis=1))
-    gyro_mag = np.sqrt(np.sum(seq[:, 3:] ** 2, axis=1))
-    feats.extend([np.mean(accel_mag), np.std(accel_mag),
-                  np.mean(gyro_mag), np.std(gyro_mag)])
-    return np.array(feats, dtype=np.float32)
-
-
-def svm_feed(imu_a_accel, imu_a_gyro, imu_b_accel, imu_b_gyro):
-    """
-    Feed one 12-axis sample into the SVM sliding window.
-    Uses hysteresis (rising-edge) detection so a sustained high prob only fires once:
-      - fires when armed AND prob crosses SVM_TRIGGER_HIGH
-      - re-arms when prob drops below SVM_TRIGGER_LOW
-    Returns (beat_bool, prob).
-    """
-    global svm_samples_since_last, svm_last_beat_time, svm_armed
-
-    if svm_model is None:
-        return False, 0.0
-
-    # Build diff signal (IMU_A - IMU_B) / 2 / NORM_SCALE → 6 channels
-    a = np.array(imu_a_accel + imu_a_gyro, dtype=np.float32)
-    b = np.array(imu_b_accel + imu_b_gyro, dtype=np.float32)
-    diff = (a - b) / 2.0 / NORM_SCALE
-    svm_buffer.append(diff)
-    svm_samples_since_last += 1
-
-    if len(svm_buffer) < SVM_WINDOW or svm_samples_since_last < SVM_STRIDE:
-        return False, 0.0
-    svm_samples_since_last = 0
-
-    seq = np.stack(list(svm_buffer))
-    feats = extract_features(seq).reshape(1, -1)
-    feats_scaled = svm_scaler.transform(feats)
-    prob = float(svm_model.predict_proba(feats_scaled)[0, 1])
-
-    now = time.time()
-    trigger = False
-    if svm_armed and prob >= SVM_TRIGGER_HIGH and (now - svm_last_beat_time) >= SVM_COOLDOWN:
-        trigger = True
-        svm_last_beat_time = now
-        svm_armed = False
-    elif not svm_armed and prob < SVM_TRIGGER_LOW:
-        svm_armed = True
-    return trigger, prob
 
 
 # --- CNN Gesture Detection ---
@@ -361,11 +265,6 @@ async def broadcast_loop():
             latest_data = generate_mock_data()
 
         if latest_data and connected_clients:
-            # Feed SVM detector with this sample
-            beat, prob = svm_feed(
-                latest_data["IMU_A"]["accel"], latest_data["IMU_A"]["gyro"],
-                latest_data["IMU_B"]["accel"], latest_data["IMU_B"]["gyro"],
-            )
             # Feed CNN gesture detector
             gesture, gesture_conf, gesture_jerk = cnn_feed(
                 latest_data["IMU_A"]["accel"], latest_data["IMU_A"]["gyro"],
@@ -373,8 +272,6 @@ async def broadcast_loop():
             )
 
             payload = dict(latest_data)
-            payload["svm_beat"] = beat
-            payload["svm_prob"] = prob
             payload["gesture"] = gesture
             payload["gesture_confidence"] = gesture_conf
             payload["gesture_jerk"] = gesture_jerk
@@ -392,7 +289,6 @@ async def broadcast_loop():
 
 
 async def main():
-    load_svm()
     load_cnn()
     server = await websockets.serve(ws_handler, WS_HOST, WS_PORT)
     print(f"[WS] Server on ws://{WS_HOST}:{WS_PORT}", flush=True)
